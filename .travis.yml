@@ -5,6 +5,8 @@ install:
   - pip install -r requirements.txt
 script:
   - coverage run    entrainement_olympiades_exo3/calcule.py
+  - coverage run -a entrainement_olympiades_exo3/calcule.py 57
   - coverage run -a entrainement_olympiades_exo3/valeurs_possibles.py
+  - coverage run -a entrainement_olympiades_exo3/valeurs_possibles.py 20
 after_success:
   - coveralls
