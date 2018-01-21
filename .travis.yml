@@ -3,12 +3,15 @@ python:
   - 3.6
 install:
   - pip install -r requirements.txt
-script:
-  - coverage run    entrainement_olympiades_exo3/calcule.py
-  - coverage run -a entrainement_olympiades_exo3/calcule.py 57
-  - coverage run -a entrainement_olympiades_exo3/valeurs_possibles.py
-  - coverage run -a entrainement_olympiades_exo3/valeurs_possibles.py 20
-script:
-  - coverage run -a ./entrainement_olympiades_2017/exercice_4.py
+jobs:
+  include:
+    - script:
+      - coverage run    entrainement_olympiades_exo3/calcule.py
+      - coverage run -a entrainement_olympiades_exo3/calcule.py 57
+      - coverage run -a entrainement_olympiades_exo3/valeurs_possibles.py
+      - coverage run -a entrainement_olympiades_exo3/valeurs_possibles.py 20
+    - script:
+      - coverage run -a ./entrainement_olympiades_2017/exercice_4.py
+    - script: flake8 --max-line-length=100  
 after_success:
   - coveralls

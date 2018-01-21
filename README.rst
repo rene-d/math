@@ -9,4 +9,3 @@ Programmes mathématiques
     :target: https://coveralls.io/github/rene-d/math?branch=master
 
 Divers petits programmes mathématiques
-
