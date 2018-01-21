@@ -6,6 +6,6 @@ install:
 script:
   - cd entrainement_olympiades_exo3
   - coverage run calcule.py
-  - coverage run valeurs_possibles.py
+  - coverage run -a valeurs_possibles.py
 after_success:
   - coveralls
