@@ -22,7 +22,7 @@ def calcule(N):
 
 # cherche les valeurs possibles de sortie du programme de calcul pour N de 1 à M
 def possibles(M):
-    valeurs = set()             # set() est une instruction Python qui crée une liste à valeurs uniques
+    valeurs = set()             # set() est une instruction qui crée une liste à valeurs uniques
 
     # boucle sur tous les N
     for N in range(1, M + 1):   # N prendra les valeurs de 1 à M

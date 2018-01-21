@@ -53,7 +53,7 @@ def calcule(N):
 if len(sys.argv) >= 2:
     for N in sys.argv[1:]:
         N = int(N)
-        print("%5d ->  %3d " % (N , calcule(N)))
+        print("%5d ->  %3d " % (N, calcule(N)))
 else:
     calcule(15)
     calcule(2015)

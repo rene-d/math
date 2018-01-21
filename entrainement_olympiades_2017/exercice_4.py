@@ -2,12 +2,15 @@
 
 """
 EXERCICE 4 : Tous impairs
-Quelle est la somme de tous les nombres entiers dont l’écriture décimale ne comporte que les chiffres impairs, tous utilisés une et une seule fois ?
+Quelle est la somme de tous les nombres entiers dont l’écriture décimale
+ne comporte que les chiffres impairs, tous utilisés une et une seule fois ?
 """
+
 
 # compte le nombre de fois que le chiffre apparaît dans la chaîne
 def compte(chaine, chiffre):
     return chaine.count("%d" % int(chiffre))
+
 
 total = 0
 nombre = 0
@@ -36,6 +39,7 @@ for i in range(100000):
 
     total += i
     nombre += 1
+
 
 print("nombre: ", nombre)
 print("somme:  ", total)
