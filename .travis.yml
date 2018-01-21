@@ -8,5 +8,7 @@ script:
   - coverage run -a entrainement_olympiades_exo3/calcule.py 57
   - coverage run -a entrainement_olympiades_exo3/valeurs_possibles.py
   - coverage run -a entrainement_olympiades_exo3/valeurs_possibles.py 20
+script:
+  - coverage run -a ./entrainement_olympiades_2017/exercice_4.py
 after_success:
   - coveralls
