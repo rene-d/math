@@ -1,0 +1,9 @@
+language: python
+python:
+  - 3.6
+install:
+  - pip install -r requirements.txt
+script:
+  - cd entrainement_olympiades_exo3
+  - coverage run calcule.py
+  - coverage run valeurs_possibles.py
