@@ -8,10 +8,7 @@ import turtle
 generation = 0
 taille = 400.0
 
-<<<<<<< HEAD
 
-=======
->>>>>>> bd945f62d5cc60b954fe632f449402ab4843dcd3
 def koch(l, n):
     """ Fractacle de Koch """
     if n <= 0:
@@ -25,10 +22,6 @@ def koch(l, n):
         turtle.left(60)
         koch(l / 3, n - 1)
 
-<<<<<<< HEAD
-
-=======
->>>>>>> bd945f62d5cc60b954fe632f449402ab4843dcd3
 def flocon(l, n):
     """ Flocon de Koch """
     koch(l, n)
@@ -37,10 +30,7 @@ def flocon(l, n):
     turtle.right(120)
     koch(l, n)
 
-<<<<<<< HEAD
 
-=======
->>>>>>> bd945f62d5cc60b954fe632f449402ab4843dcd3
 def dessine(l, n):
     """ dessine l'étoile de Koch de génération n """
 
@@ -48,11 +38,7 @@ def dessine(l, n):
     turtle.clear()
 
     turtle.onscreenclick(None, 1)
-<<<<<<< HEAD
     turtle.onscreenclick(None, 3)
-=======
-    turtle.onscreenclick(None, 2)
->>>>>>> bd945f62d5cc60b954fe632f449402ab4843dcd3
 
     turtle.hideturtle()
 
