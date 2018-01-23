@@ -22,6 +22,7 @@ def koch(l, n):
         turtle.left(60)
         koch(l / 3, n - 1)
 
+        
 def flocon(l, n):
     """ Flocon de Koch """
     koch(l, n)
