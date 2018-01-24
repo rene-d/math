@@ -12,6 +12,6 @@ jobs:
       - coverage run -a olympiades/entrainement_exo3/valeurs_possibles.py 20
     - script:
       - coverage run -a olympiades/entrainement_2017_exercice_4.py
-    - script: flake8 --max-line-length=100  
+    - script: flake8
 after_success:
   - coveralls
