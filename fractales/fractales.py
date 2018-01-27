@@ -1,5 +1,13 @@
 #! /usr/bin/env python3
+# rené 2018
 
+""" courbes fractales
+
+https://fr.wikipedia.org/wiki/Flocon_de_Koch
+
+"""
+
+import sys
 import tkinter as tk
 from typing import NamedTuple
 import math
@@ -14,7 +22,6 @@ class pointF(NamedTuple):
     x: float
     y: float
     sens: bool
-
 
 class rect2D(NamedTuple):
     x1: float
@@ -68,6 +75,17 @@ def initFract(nom):
             pointF(1/3.,        0, True),    #3
             pointF(1,           0, True),    #4
         ]
+
+    elif nom == "Cesaro":
+        alpha = math.radians(85)        # angle de la pointe, 60° pour von Koch
+        a = 1 / (1 + math.cos(alpha))   # longueur de chaque segment _/\_
+        gen = [
+            pointF(    -1,                   0, True),    #0
+            pointF(-1 + a,                   0, True),    #1
+            pointF(     0, a * math.sin(alpha), True),    #2
+            pointF( 1 - a,                   0, True),    #3
+            pointF(     1,                   0, True),    #4
+        ]        
 
     elif nom == "Peano":
         gen = [
@@ -191,8 +209,8 @@ nn = 0
 
 def callback(event):
     global canvas, repere, courant, root, nn, premier
-    print("callback:", event)
-    if event.char == '+':
+    #print("callback:", event)
+    if event.char == '+' and nn < 5:
         nn += 1
         canvas.delete("all")
         premier = True
@@ -210,8 +228,8 @@ def dessine(nom):
 
     initFract(nom)
 
-    ratio = 1024 / 768 * 4.
-    fenetre(-ratio/2, ratio/2, -1, 3)
+    ratio = 1024 / 768 * 8.
+    fenetre(-ratio/2, ratio/2, -2, 6)
 
     dessinefractale(point2D(-2,0), point2D(2,0), True, 0, "black")
 
@@ -221,5 +239,11 @@ def dessine(nom):
     root.mainloop()
 
 
-#koch()
-dessine("Koch")
+def main():
+    if len(sys.argv) >= 2:
+        dessine(sys.argv[1])
+    else:
+        dessine("Koch")
+
+if __name__ == '__main__':
+    main()
