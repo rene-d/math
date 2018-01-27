@@ -9,7 +9,10 @@ script:
   - coverage run -a olympiades/entrainement_exo3/valeurs_possibles.py
   - coverage run -a olympiades/entrainement_exo3/valeurs_possibles.py 20
   - coverage run -a olympiades/entrainement_2017_exercice_4.py
-  - py.test -s --cov fractales
+script:
+  - cd fractales
+  - py.test -s --cov
+script:
   - flake8
 after_success:
   - coveralls
