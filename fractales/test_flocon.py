@@ -25,6 +25,7 @@ def test_gen1(mocker):
     assert turtle.left.mock_calls == [call(60), call(60)]
     assert turtle.right.mock_calls == [call(120)]
 
+
 def test_flocon0(mocker):
     """ flocon de génération 0: triangle équilatéral """
 
@@ -53,7 +54,6 @@ def test_flocon1(mocker):
     # trois fois deux virages à 60° _/ \_
     assert turtle.left.mock_calls == [call(60)] * (2 * 3)
 
-    # trois fois un virage à 120° /\ 
+    # trois fois un virage à 120° /\
     # et deux virages à 120° entre les côtés du triangle flocon0
     assert turtle.right.mock_calls == [call(120)] * (1 * 3 + 2)
-    

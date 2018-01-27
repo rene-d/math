@@ -32,7 +32,7 @@ def flocon(l, n):
     koch(l, n)
 
 
-def dessine(l, n):
+def dessine(l, n):          # pragma: no cover
     """ dessine l'étoile de Koch de génération n """
 
     turtle.reset()
@@ -62,14 +62,14 @@ def dessine(l, n):
     turtle.onscreenclick(precedent, 3)
 
 
-def suivant(x, y):
+def suivant(x, y):          # pragma: no cover
     """ augmente le niveau de génération """
     global generation, taille
     generation += 1
     dessine(taille, generation)
 
 
-def precedent(x, y):
+def precedent(x, y):        # pragma: no cover
     """ diminue le niveau de génération """
     global generation, taille
     if generation > 1:
@@ -77,7 +77,7 @@ def precedent(x, y):
         dessine(taille, generation)
 
 
-def main():
+def main():                 # pragma: no cover
     print("x: sortir")
     print("clic gauche: augmenter la génération")
     print("clic droit: diminuer la génération")
