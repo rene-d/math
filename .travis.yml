@@ -4,15 +4,16 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - coverage run    olympiades/entrainement_exo3/calcule.py
-  - coverage run -a olympiades/entrainement_exo3/calcule.py 57
-  - coverage run -a olympiades/entrainement_exo3/valeurs_possibles.py
-  - coverage run -a olympiades/entrainement_exo3/valeurs_possibles.py 20
-  - coverage run -a olympiades/entrainement_2017_exercice_4.py
-script:
-  - cd fractales
-  - py.test -s --cov
-script:
-  - flake8
+  script:
+    - coverage run    olympiades/entrainement_exo3/calcule.py
+    - coverage run -a olympiades/entrainement_exo3/calcule.py 57
+    - coverage run -a olympiades/entrainement_exo3/valeurs_possibles.py
+    - coverage run -a olympiades/entrainement_exo3/valeurs_possibles.py 20
+    - coverage run -a olympiades/entrainement_2017_exercice_4.py
+  script:
+    - cd fractales
+    - py.test -s --cov
+  script:
+    - flake8
 after_success:
   - coveralls
