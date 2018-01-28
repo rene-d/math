@@ -5,7 +5,9 @@
 https://fr.wikipedia.org/wiki/Flocon_de_Koch
 """
 
-import sys, time, math
+import sys
+import time
+import math
 import tkinter as tk
 from typing import NamedTuple
 
@@ -35,20 +37,20 @@ class Fractale:
         if nom == "Mandelbrot":
             # «courbe de Mandelbrot» : exemple d'une courbe de Peano
             self.gen = [
-                pointF(    -1,                 0, False),    # 0
+                pointF(-1,                     0, False),    # 0
                 pointF(-2 / 3,       sqrt(3) / 3, True),     # 1
                 pointF(-1 / 3,   2 * sqrt(3) / 3, True),     # 2
-                pointF( 1 / 3,   2 * sqrt(3) / 3, True),     # 3
-                pointF( 2 / 3,       sqrt(3) / 3, True),     # 4
-                pointF( 1 / 3,   4 * sqrt(3) / 9, False),    # 5
-                pointF(     0,   5 * sqrt(3) / 9, False),    # 6
+                pointF(1 / 3,    2 * sqrt(3) / 3, True),     # 3
+                pointF(2 / 3,        sqrt(3) / 3, True),     # 4
+                pointF(1 / 3,    4 * sqrt(3) / 9, False),    # 5
+                pointF(0,        5 * sqrt(3) / 9, False),    # 6
                 pointF(-1 / 3,   4 * sqrt(3) / 9, False),    # 7
                 pointF(-1 / 3,   2 * sqrt(3) / 9, True),     # 8
-                pointF( 1 / 3,   2 * sqrt(3) / 9, True),     # 9
-                pointF(    0,        sqrt(3) / 9, False),    # 10
+                pointF(1 / 3,    2 * sqrt(3) / 9, True),     # 9
+                pointF(0,            sqrt(3) / 9, False),    # 10
                 pointF(-1 / 3,                 0, False),    # 11
-                pointF( 1 / 3,                 0, True),     # 12
-                pointF(     1,                 0, True),     # 13
+                pointF(1 / 3,                  0, True),     # 12
+                pointF(1,                      0, True),     # 13
             ]
 
         elif nom == "Koch":
@@ -64,7 +66,7 @@ class Fractale:
             alpha = math.radians(85)        # angle de la pointe, 60° pour von Koch
             a = 1 / (1 + math.cos(alpha))   # longueur de chaque segment _/\_
             self.gen = [
-                pointF(1, 0, True),                     # 0
+                pointF(-1, 0, True),                    # 0
                 pointF(-1 + a, 0, True),                # 1
                 pointF(0, a * math.sin(alpha), True),   # 2
                 pointF(1 - a, 0, True),                 # 3
@@ -87,26 +89,33 @@ class Fractale:
 
 
 class Crt:
-    def __init__(self):
+    def __init__(self, width, height):
+        self.dimensions = [width, height]
         self.root = tk.Tk()
-        self.canvas = tk.Canvas(self.root, width=1024, height=768,
+        self.canvas = tk.Canvas(self.root, width=width, height=height,
                                 borderwidth=0, highlightthickness=0)
         self.canvas.grid()
 
-    def repere(self, x_min, x_max, y_min, y_max):
-        bounds = [0, 0, 1024, 768]
-        self.coords = [x_min,
-                       y_max,
-                       (bounds[2] - bounds[0]) / (x_max - x_min),
-                       (bounds[3] - bounds[1]) / (y_min - y_max)]
+    def coords(self, x_min, x_max, y_min, y_max):
+        bounds = [0, 0, self.dimensions[0], self.dimensions[1]]
+
+        self.coords_x = [x_min, x_max]
+        self.coords_y = [y_min, y_max]
+
+        self.coords_rect = [x_min,
+                            y_max,
+                            (bounds[2] - bounds[0]) / (x_max - x_min),
+                            (bounds[3] - bounds[1]) / (y_min - y_max)]
 
     def conv(self, p):
-        return (p.x - self.coords[0]) * self.coords[2], (p.y - self.coords[1]) * self.coords[3]
+        x = (p.x - self.coords_rect[0]) * self.coords_rect[2]
+        y = (p.y - self.coords_rect[1]) * self.coords_rect[3]
+        return x, y
 
-    def ligne(self, p1, p2, fill="red"):
+    def ligne(self, p1, p2, fill="red", dash=None):
         x1, y1 = self.conv(p1)
         x2, y2 = self.conv(p2)
-        self.canvas.create_line(x1, y1, x2, y2, fill=fill)       # dash=(2,16)
+        self.canvas.create_line(x1, y1, x2, y2, fill=fill, dash=dash)
 
     def clear(self):
         self.canvas.delete("all")
@@ -114,23 +123,65 @@ class Crt:
     def bind_key(self, callback):
         self.canvas.bind("<Key>", callback)
 
+    def repere(self):
+        p1 = point2D(self.coords_x[0], 0)
+        p2 = point2D(self.coords_x[1], 0)
+
+        p3 = point2D(0, self.coords_y[0])
+        p4 = point2D(0, self.coords_y[1])
+
+        self.ligne(p1, p2, dash=(2, 16), fill="blue")
+        self.ligne(p3, p4, dash=(2, 16), fill="blue")
+
 
 class Dessine:
     def __init__(self, nom):
-        self.crt = Crt()
         self.fractale = Fractale(nom)
         self.generation = 0
         self.nom = nom
 
-        ratio = 1024 / 768 * 8.
-        self.crt.repere(-ratio / 2, ratio / 2, -2, 6)
+        # self.crt = Crt(1024, 768)
+        # ratio = 1024 / 768 * 8.
+        # self.crt.coords(-ratio / 2, ratio / 2, -2, 6)
 
-        self.dessinefractale(point2D(-2, 0), point2D(2, 0), True, 0, "black")
+        self.crt = Crt(800, 800)
+        self.crt.coords(-2.4, 2.4, -1.2, 3.6)
 
-        self.crt.canvas.focus_set()
         self.dessine()
 
+        self.crt.canvas.focus_set()
         self.crt.root.mainloop()
+
+    def dessine(self):
+        self.crt.bind_key(None)
+        self.crt.clear()
+        self.crt.root.wm_title("Fractales : {} - génération {} [en cours...]".format(
+                               self.nom, self.generation))
+        start_time = time.time()
+
+        self.couleur = "black" if self.generation == 0 else "red"
+        self.dessinefractale(point2D(-2, 0), point2D(2, 0), True, self.generation)
+
+        self.crt.canvas.update()
+
+        self.crt.root.wm_title("Fractales : {} - génération {} [{:.3f} secondes]".format(
+                               self.nom, self.generation, time.time() - start_time))
+        self.crt.bind_key(self.callback)
+
+    def callback(self, event):
+        # print("callback:", event)
+        old_generation = self.generation
+        if event.char == '+' and self.generation < 5:
+            self.generation += 1
+        elif event.char == '-' and self.generation > 0:
+            self.generation -= 1
+        elif event.char == 'r':
+            self.crt.repere()
+        elif event.char == 'u':
+            old_generation = None
+
+        if self.generation != old_generation:
+            self.dessine()
 
     def dessinefractale(self, ori, ext, sensf, ordre, fill="red"):
         # calcul coefficients de la transformation : [seg1,seg2] --> [ori,ext]
@@ -164,34 +215,11 @@ class Dessine:
                 ext = p
 
                 if ordre == 0:
-                    self.crt.ligne(ori, ext, fill)
+                    self.crt.ligne(ori, ext, self.couleur)
                 else:
-                    self.dessinefractale(ori, ext, not sens_ori ^ sensf, ordre - 1, fill)
+                    self.dessinefractale(ori, ext, not sens_ori ^ sensf, ordre - 1)
             ori = p
             sens_ori = i.sens
-
-    def dessine(self):
-        self.crt.bind_key(None)
-        self.crt.clear()
-        self.crt.root.wm_title("Fractales : {} génération {} [en cours...]".format(self.nom, self.generation))
-        start_time = time.time()
-
-        couleur = "black" if self.generation == 0 else "red"
-        self.dessinefractale(point2D(-2, 0), point2D(2, 0), True, self.generation, fill=couleur)
-        self.crt.bind_key(self.callback)
-
-        self.crt.root.wm_title("Fractales : {} génération {} [{:.3f} secondes]".format(self.nom, self.generation, time.time() - start_time))
-
-    def callback(self, event):
-        # print("callback:", event)
-        old_generation = self.generation
-        if event.char == '+' and self.generation < 5:
-            self.generation += 1
-        elif event.char == '-' and self.generation > 0:
-            self.generation -= 1
-
-        if self.generation != old_generation:
-            self.dessine()
 
 
 def main():
