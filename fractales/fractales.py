@@ -3,6 +3,7 @@
 
 """ courbes fractales
 https://fr.wikipedia.org/wiki/Flocon_de_Koch
+http://www.fractalcurves.com/
 """
 
 import sys
@@ -10,6 +11,7 @@ import time
 import math
 import tkinter as tk
 from typing import NamedTuple
+import argparse
 
 
 class point2D(NamedTuple):
@@ -20,7 +22,8 @@ class point2D(NamedTuple):
 class pointF(NamedTuple):
     x: float
     y: float
-    sens: bool
+    sens: bool = True
+    inverse: bool = False
 
 
 def sqr(x):
@@ -34,6 +37,11 @@ def sqrt(x):
 class Fractale:
 
     def __init__(self, nom):
+
+        self.max = 5                # génération maximale acceptable
+        self.p1 = point2D(-1, 0)
+        self.p2 = point2D(1, 0)
+
         if nom == "Mandelbrot":
             # «courbe de Mandelbrot» : exemple d'une courbe de Peano
             self.gen = [
@@ -87,6 +95,52 @@ class Fractale:
                 pointF(3, 0, True),
             ]
 
+        elif nom == "Dragon Curve":
+            self.gen = [
+                pointF(0, 0, True),
+                pointF(0, 1, False),
+                pointF(1, 1, True),
+            ]
+
+            self.max = 15
+            self.p1 = point2D(0 ,0)
+            self.p2 = point2D(1, 1)
+
+        elif nom == "Polya Sweep":
+            self.gen = [
+                pointF(0, 0, False),
+                pointF(0, 1, False),
+                pointF(1, 1, True),
+            ]
+
+            self.max = 15
+            self.p1 = point2D(0, 1)
+            self.p2 = point2D(0, 0)
+
+        elif nom == "V1 Dragon":
+            self.gen = [
+                pointF(0, 0, True, False),
+                pointF(1, 1, True, True),
+                pointF(2, 1, True, False),
+                pointF(2, 0),
+            ]
+
+            self.max = 9
+            self.p1 = point2D(-1, 0)
+            self.p2 = point2D(1, 0)
+
+        elif nom == "Carbajo":
+            self.gen = [
+                pointF(0, 0, True, True),
+                pointF(1, 1, True),
+                pointF(2, 1, True),
+                pointF(2, 0),
+            ]
+
+            self.max = 9
+            self.p1 = point2D(-1, 0)
+            self.p2 = point2D(1, 0)
+
 
 class Crt:
     def __init__(self, width, height):
@@ -112,10 +166,15 @@ class Crt:
         y = (p.y - self.coords_rect[1]) * self.coords_rect[3]
         return x, y
 
-    def ligne(self, p1, p2, fill="red", dash=None):
+    def ligne(self, p1, p2, fill="red", **kwargs):
         x1, y1 = self.conv(p1)
         x2, y2 = self.conv(p2)
-        self.canvas.create_line(x1, y1, x2, y2, fill=fill, dash=dash)
+        self.canvas.create_line(x1, y1, x2, y2, fill=fill, **kwargs)
+
+    def rond(self, p1):
+        x1, y1 = self.conv(p1)
+
+        self.canvas.create_oval(x1 - 2, y1 - 2, x1 + 2, y1 + 2)
 
     def clear(self):
         self.canvas.delete("all")
@@ -135,10 +194,12 @@ class Crt:
 
 
 class Dessine:
-    def __init__(self, nom):
+    def __init__(self, nom, debug=False):
+        self.nom = nom
+        self.debug = debug
+
         self.fractale = Fractale(nom)
         self.generation = 0
-        self.nom = nom
 
         # self.crt = Crt(1024, 768)
         # ratio = 1024 / 768 * 8.
@@ -160,7 +221,7 @@ class Dessine:
         start_time = time.time()
 
         self.couleur = "black" if self.generation == 0 else "red"
-        self.dessinefractale(point2D(-2, 0), point2D(2, 0), True, self.generation)
+        self.dessinefractale(self.fractale.p1, self.fractale.p2, True, self.generation)
 
         self.crt.canvas.update()
 
@@ -169,12 +230,14 @@ class Dessine:
         self.crt.bind_key(self.callback)
 
     def callback(self, event):
-        # print("callback:", event)
+        print("callback:", event)
         old_generation = self.generation
-        if event.char == '+' and self.generation < 5:
-            self.generation += 1
-        elif event.char == '-' and self.generation > 0:
-            self.generation -= 1
+        if (event.char == '+' or event.keysym == 'Right'):
+            if self.generation < self.fractale.max:
+                self.generation += 1
+        elif (event.char == '-'  or event.keysym == 'Left'):
+            if self.generation > 0:
+                self.generation -= 1
         elif event.char == 'r':
             self.crt.repere()
         elif event.char == 'u':
@@ -209,6 +272,8 @@ class Dessine:
 
         ori = None
         sens_ori = None
+        inverse_ori = None
+
         for i in self.fractale.gen:
             p = point2D(C * i.x - S * i.y * anti + A, S * i.x + C * i.y * anti + B)
             if ori is not None:
@@ -217,16 +282,35 @@ class Dessine:
                 if ordre == 0:
                     self.crt.ligne(ori, ext, self.couleur)
                 else:
-                    self.dessinefractale(ori, ext, not sens_ori ^ sensf, ordre - 1)
+                    if inverse_ori:
+                        self.dessinefractale(ext, ori, not sens_ori ^ sensf, ordre - 1)
+                    else:
+                        self.dessinefractale(ori, ext, not sens_ori ^ sensf, ordre - 1)
+
+                    if ordre == 1 and self.debug:
+                        self.crt.ligne(ori, ext, fill="blue", dash=(2,6))
+
+            else:
+                if self.debug:
+                    # dessine un petit rond sur l'origine de la graine
+                    self.crt.rond(p)
+
             ori = p
             sens_ori = i.sens
+            inverse_ori = i.inverse
+
+        if self.debug:
+            # dessine un petit rond sur l'extrêmité de la graine
+            self.crt.rond(ext)
 
 
 def main():
-    if len(sys.argv) >= 2:
-        Dessine(sys.argv[1])
-    else:
-        Dessine("Koch")
+    parser = argparse.ArgumentParser(description='Courbes Fractales')
+    parser.add_argument("-v", "--verbose", action="store_true")
+    parser.add_argument("nom", help="Nom de la fractale", default="Koch")
+    args = parser.parse_args()
+
+    Dessine(args.nom, args.verbose)
 
 
 if __name__ == '__main__':
