@@ -1,4 +1,7 @@
 {
+    "files.trimTrailingWhitespace": true,
+
+    // https://code.visualstudio.com/docs/python/linting
     "python.linting.pylintEnabled": false,
-    "files.trimTrailingWhitespace": true
+    "python.linting.flake8Enabled": true,
 }
