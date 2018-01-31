@@ -12,163 +12,175 @@ import tkinter as tk
 import tkinter.messagebox as mbox
 from typing import NamedTuple
 import argparse
+import xml.etree.ElementTree as ET
 
+# contexte global et unique de Tk
+root_tk = None
 
-class point2D(NamedTuple):
+class Point2D(NamedTuple):
+    """ point dans le plan """
     x: float
     y: float
+    def str(self):
+        """ retourne les coordonnées pour affichage """
+        return "{:.5f} x {:.5f}".format(self.x, self.y)
 
 
-class pointF(NamedTuple):
+class PointF(NamedTuple):
+    """ noeud d'une courbe fractale """
     x: float
     y: float
     sens: bool = True
     inverse: bool = False
 
 
-def sqr(x):
-    return x * x
-
-
-def sqrt(x):
-    return math.sqrt(x)
-
-
 class Fractale:
 
     def __init__(self, nom):
-
+        
         # valeurs par défaut
         self.max = 5                # génération maximale acceptable
-        self.p1 = point2D(-1, 0)
-        self.p2 = point2D(1, 0)
-        self.coords = [-2.4, 2.4, -1.2, 3.6]
+        self.p1 = Point2D(-1, 0)
+        self.p2 = Point2D(1, 0)
+        self.limites = [-2.4, 2.4, -1.2, 3.6]
+        
+        if nom is None:
+            return
+
+        if type(nom) is not str:
+             self.from_xml(nom)
+             return
+
+        sqrt = math.sqrt
 
         if nom == "Mandelbrot":
             # «courbe de Mandelbrot» : exemple d'une courbe de Peano
             self.gen = [
-                pointF(-1,                     0, False),    # 0
-                pointF(-2 / 3,       sqrt(3) / 3, True),     # 1
-                pointF(-1 / 3,   2 * sqrt(3) / 3, True),     # 2
-                pointF(1 / 3,    2 * sqrt(3) / 3, True),     # 3
-                pointF(2 / 3,        sqrt(3) / 3, True),     # 4
-                pointF(1 / 3,    4 * sqrt(3) / 9, False),    # 5
-                pointF(0,        5 * sqrt(3) / 9, False),    # 6
-                pointF(-1 / 3,   4 * sqrt(3) / 9, False),    # 7
-                pointF(-1 / 3,   2 * sqrt(3) / 9, True),     # 8
-                pointF(1 / 3,    2 * sqrt(3) / 9, True),     # 9
-                pointF(0,            sqrt(3) / 9, False),    # 10
-                pointF(-1 / 3,                 0, False),    # 11
-                pointF(1 / 3,                  0, True),     # 12
-                pointF(1,                      0, True),     # 13
+                PointF(-1,                     0, False),    # 0
+                PointF(-2 / 3,       sqrt(3) / 3, True),     # 1
+                PointF(-1 / 3,   2 * sqrt(3) / 3, True),     # 2
+                PointF(1 / 3,    2 * sqrt(3) / 3, True),     # 3
+                PointF(2 / 3,        sqrt(3) / 3, True),     # 4
+                PointF(1 / 3,    4 * sqrt(3) / 9, False),    # 5
+                PointF(0,        5 * sqrt(3) / 9, False),    # 6
+                PointF(-1 / 3,   4 * sqrt(3) / 9, False),    # 7
+                PointF(-1 / 3,   2 * sqrt(3) / 9, True),     # 8
+                PointF(1 / 3,    2 * sqrt(3) / 9, True),     # 9
+                PointF(0,            sqrt(3) / 9, False),    # 10
+                PointF(-1 / 3,                 0, False),    # 11
+                PointF(1 / 3,                  0, True),     # 12
+                PointF(1,                      0, True),     # 13
             ]
 
             self.max = 4
-            self.p1 = point2D(-1.5, 0)
-            self.p2 = point2D(1.5, 0)
-            self.coords = [-1.5, 1.5, -sqrt(3) / 2, 3 * sqrt(3) / 2]
+            self.p1 = Point2D(-1.5, 0)
+            self.p2 = Point2D(1.5, 0)
+            self.limites = [-1.5, 1.5, -sqrt(3) / 2, 3 * sqrt(3) / 2]
 
         elif nom == "Koch":
             self.gen = [
-                pointF(-1,          0, True),    # 0
-                pointF(-1/3,        0, True),    # 1
-                pointF(0, sqrt(3) / 3, True),    # 2
-                pointF(1/3,         0, True),    # 3
-                pointF(1,           0, True),    # 4
+                PointF(-1,          0, True),    # 0
+                PointF(-1/3,        0, True),    # 1
+                PointF(0, sqrt(3) / 3, True),    # 2
+                PointF(1/3,         0, True),    # 3
+                PointF(1,           0, True),    # 4
             ]
 
             self.max = 7
-            self.p1 = point2D(-1.5, 0)
-            self.p2 = point2D(1.5, 0)
-            self.coords = [-1.5, 1.5, 0, sqrt(3) / 2]
+            self.p1 = Point2D(-1.5, 0)
+            self.p2 = Point2D(1.5, 0)
+            self.limites = [-1.5, 1.5, 0, sqrt(3) / 2]
 
-        elif nom == "Cesaro":
-            alpha = math.radians(85)        # angle de la pointe, 60° pour von Koch
-            a = 1 / (1 + math.cos(alpha))   # longueur de chaque segment _/\_
-            self.gen = [
-                pointF(-1, 0, True),                    # 0
-                pointF(-1 + a, 0, True),                # 1
-                pointF(0, a * math.sin(alpha), True),   # 2
-                pointF(1 - a, 0, True),                 # 3
-                pointF(1, 0, True),                     # 4
-            ]
-            self.p1 = point2D(-1, 0)
-            self.p2 = point2D(1, 0)
-            self.coords = [-1, 1, 0, a]
+    def from_xml(self, child):
 
-        elif nom == "Peano":
-            self.gen = [
-                pointF(-3, 0, True),
-                pointF(-1, 0, True),
-                pointF(-1, 2, True),
-                pointF(1, 2, True),
-                pointF(1, 0, True),
-                pointF(1, -2, True),
-                pointF(-1, -2, True),
-                pointF(-1, 0, True),
-                pointF(1, 0, True),
-                pointF(3, 0, True),
-            ]
-            self.p1 = point2D(-1, 0)
-            self.p2 = point2D(1, 0)
-            self.coords = [-1, 1, -1, 1]
+        locals = {}
 
-        elif nom == "Dragon Curve":
-            self.gen = [
-                pointF(0, 0, True),
-                pointF(0, 1, False),
-                pointF(1, 1, True),
-            ]
-            self.max = 20
-            self.p1 = point2D(0, 0)
-            self.p2 = point2D(1, 1)
-            self.coords = [-2 / 3, 1, -1 / 3, 7 / 6]
+        def evalm(x):
+            return eval(x, { 'sqrt': math.sqrt,
+                             'sqr': lambda x: math.pow(x, 2),
+                             'sin': math.sin,
+                             'cos': math.cos,
+                             'radians': math.radians,
+                             'pi': math.pi }, locals)
 
-        elif nom == "Polya Sweep":
-            self.gen = [
-                pointF(0, 0, False),
-                pointF(0, 1, False),
-                pointF(1, 1, True),
-            ]
-            self.max = 15
-            self.p1 = point2D(0, 1)
-            self.p2 = point2D(0, 0)
-            self.coords = [0, 0.5, 0, 1]
+        def tobool(s):
+            return True if s.lower() == "true" else False
 
-        elif nom == "V1 Dragon":
-            self.gen = [
-                pointF(0, 0, True, False),
-                pointF(1, 1, True, True),
-                pointF(2, 1, True, False),
-                pointF(2, 0),
-            ]
-            self.max = 9
-            self.p1 = point2D(-1, 0)
-            self.p2 = point2D(1, 0)
-            self.coords = [-2, 2, -0.5, 2]
+        self.nom = child.findtext('nom')
 
-        elif nom == "Carbajo":
-            self.gen = [
-                pointF(0, 0, True, True),
-                pointF(1, 1, True),
-                pointF(2, 1, True),
-                pointF(2, 0),
-            ]
-            self.max = 10
-            self.p1 = point2D(-1, 0)
-            self.p2 = point2D(1, 0)
-            self.coords = [-1.5, 2, -1, 2]
+        for var in child.findall(u'variables/variable'):
+            v = var.attrib['nom']
+            x = var.attrib['valeur']
+            locals[v] = evalm(x)
+        
+        self.gen = []
+        for p in child.find(u'générateur'):
+            x = evalm(p.attrib['x'])
+            y = evalm(p.attrib['y'])
+            sens = tobool(p.attrib.get('sens', 'True'))
+            inverse = tobool(p.attrib.get('inverse', 'False'))
+            p = PointF(x, y, sens, inverse)
+            self.gen.append(p)
 
+        tag = child.find(u'génération')
+        if tag is not None:
+            self.max = int(tag.attrib.get('max'))
+        
+        tag = child.find(u'tracé/point1')
+        if tag is not None:
+            self.p1 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
+
+        tag = child.find(u'tracé/point2')
+        if tag is not None:
+            self.p2 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
+
+        tag = child.find(u'tracé/limites')
+        if tag is not None:
+            self.limites = [evalm(tag.attrib['min_x']), 
+                           evalm(tag.attrib['max_x']), 
+                           evalm(tag.attrib['min_y']),
+                           evalm(tag.attrib['max_y']) ] 
+
+class Fractales:
+    def __init__(self, fichier="fractales.xml"):
+        tree = ET.parse(fichier)
+        root = tree.getroot()
+
+        if root.tag != "fractales":
+            return
+
+        self.definitions = [i.find('nom').text for i in root.findall("fractale[nom]")]
+        self.tree = tree
+
+    def liste(self):
+        for i in self.definitions:
+            f = self.fractale(i)
+            print("{:20s} {:2d} {}".format(i, len(f.gen), ""))
+
+    def fractale(self, nom):
+        if self.tree is None:
+            return
+        child = self.tree.getroot().find("fractale[nom='{}']".format(nom))
+        return Fractale(child)
+       
+    def cherche(self, nom, incr):
+        i = self.definitions.index(nom) + incr
+        if i >= 0 and i < len(self.definitions):
+            nom = self.definitions[i]
+        return nom
 
 class Crt:
     def __init__(self, width, height):
+        global root_tk
         self.dimensions = [width, height]
-        self.root = tk.Tk()
+        if root_tk is None: root_tk = tk.Tk()
+        self.root = root_tk #tk.Tk()
         self.canvas = tk.Canvas(self.root, width=width, height=height,
                                 borderwidth=0, highlightthickness=0)
         self.canvas.grid()
+        self.coords = None
 
-    def coords(self, x_min, x_max, y_min, y_max, scale=1, margin=24):
+    def set_coords(self, x_min, x_max, y_min, y_max, scale=1, margin=24):
         bounds = [0, 0, self.dimensions[0], self.dimensions[1]]
 
         self.coords_x = [x_min, x_max]
@@ -201,69 +213,96 @@ class Crt:
         x1, y1 = self.conv(p1)
         x2, y2 = self.conv(p2)
         signe_sens = -1 if sens else 1
-        longueur = sqrt(sqr(x1 - x2) + sqr(y1 - y2))
+        longueur = math.sqrt(math.pow(x1 - x2, 2) + math.pow(y1 - y2, 2))
         ax2 = x2 - 10 * (x2 - x1) / longueur
         ay2 = y2 - 10 * (y2 - y1) / longueur
         ax1 = ax2 - 6 * (y2 - y1) / longueur * signe_sens
         ay1 = ay2 + 6 * (x2 - x1) / longueur * signe_sens
-        self.canvas.create_polygon([x1, y1, x2, y2, ax1, ay1, ax2, ay2], outline="black", fill="red", width=1)
+        self.canvas.create_polygon([x1, y1, x2, y2, ax1, ay1, ax2, ay2], 
+                                   outline="black", fill="red", width=1)
 
     def rond(self, p1):
         x1, y1 = self.conv(p1)
 
         self.canvas.create_oval(x1 - 2, y1 - 2, x1 + 2, y1 + 2)
 
+    def conv_inverse(self, x, y):
+        rx = x  / self.coords_rect[2] + self.coords_rect[0]
+        ry = y  / self.coords_rect[3] + self.coords_rect[1]
+        return Point2D(rx, ry)
+
     def clear(self):
         self.canvas.delete("all")
+        self.canvas.unbind("<Motion>")
+        self.canvas.unbind("<Key>")
 
     def bind_key(self, callback):
-        self.canvas.bind("<Key>", callback)
+        if callback is not None:
+            self.canvas.bind("<Key>", callback)
 
     def repere(self):
-        p1 = point2D(self.coords_x[0], 0)
-        p2 = point2D(self.coords_x[1], 0)
+        p1 = Point2D(self.coords_x[0], 0)
+        p2 = Point2D(self.coords_x[1], 0)
 
-        p3 = point2D(0, self.coords_y[0])
-        p4 = point2D(0, self.coords_y[1])
+        p3 = Point2D(0, self.coords_y[0])
+        p4 = Point2D(0, self.coords_y[1])
 
-        self.ligne(p1, p2, dash=(2, 16), fill="blue")
-        self.ligne(p3, p4, dash=(2, 16), fill="blue")
+        self.ligne(p1, p2, dash=(2, 8), fill="blue")
+        self.ligne(p3, p4, dash=(2, 8), fill="blue")
 
+        for i in range(int(self.coords_x[0]), int(self.coords_x[1]) + 1):
+            x, y = self.conv(Point2D(i, 0))
+            self.canvas.create_line(x, y - 4, x, y + 4, fill="blue")
+
+        for i in range(int(self.coords_y[0]), int(self.coords_y[1]) + 1):
+            x, y = self.conv(Point2D(0, i))
+            self.canvas.create_line(x - 4, y, x + 4, y, fill="blue")
+
+        def affiche_xy(event):
+            p = self.conv_inverse(event.x, event.y)
+            if self.coords is not None:
+                self.canvas.delete(self.coords)
+            self.coords = self.canvas.create_text(4, 4, text=p.str(), anchor=tk.NW)
+        self.canvas.bind("<Motion>", affiche_xy)
+
+        affiche_xy(Point2D(self.root.winfo_pointerx() - self.root.winfo_rootx(), 
+                           self.root.winfo_pointery() - self.root.winfo_rooty()))
 
 class Dessine:
-    def __init__(self, nom, debug=False, generation=0):
-        self.nom = nom
+    def __init__(self, fractale, debug=False, generation=0):
         self.debug = debug
+        self.continuer = 0
 
         self.generation = generation
-        self.fractale = Fractale(nom)
+        self.fractale = fractale
 
         self.smooth = False
 
-        coords = self.fractale.coords
+        limites = self.fractale.limites
 
-        ratio_width_height = abs((coords[1] - coords[0]) / (coords[3] - coords[2]))
-        h = 800
+        ratio_width_height = abs((limites[1] - limites[0]) / (limites[3] - limites[2]))
+        h = 600
         w = h * ratio_width_height
-        if w > 1280:
-            w = 1280
+        if w > 1024:
+            w = 1024
             h = w / ratio_width_height
 
         self.crt = Crt(w, h)
-        self.crt.coords(*self.fractale.coords)
+        self.crt.set_coords(*self.fractale.limites)
         self.dessine()
 
         self.crt.canvas.focus_set()
         self.crt.root.mainloop()
+        self.crt.canvas.destroy()
 
     def dessine(self):
         self.crt.bind_key(None)
         self.crt.clear()
-        self.crt.root.wm_title("Fractales : {} - génération {} [en cours...]".format(
-                               self.nom, self.generation))
+        self.crt.root.wm_title("Fractale : {} - génération {} [en cours...]".format(
+                               self.fractale.nom, self.generation))
         start_time = time.time()
 
-        print("dessine {} gen {}".format(self.nom, self.generation))
+        print("dessine {} gen {}".format(self.fractale.nom, self.generation))
         self.couleur = "black" if self.generation == 0 else "red"
 
         self.points = []
@@ -278,8 +317,14 @@ class Dessine:
 
         self.crt.canvas.update()
 
-        self.crt.root.wm_title("Fractales : {} - génération {} [{:.3f} secondes]".format(
-                               self.nom, self.generation, time.time() - start_time))
+        duree = time.time() - start_time
+
+        self.crt.root.wm_title("Fractale : {} - génération {} [{:.3f} secondes]".format(
+                               self.fractale.nom, self.generation, duree))
+
+        if duree > 4:
+            self.fractale.max = self.generation
+
         self.crt.bind_key(self.callback)
 
     def callback(self, event):
@@ -305,9 +350,11 @@ class Dessine:
             self.smooth = not self.smooth
             old_generation = None
         elif event.keysym == 'Next':
-            pass
+            self.continuer = 1
+            self.crt.root.quit()
         elif event.keysym == 'Prior':
-            pass
+            self.continuer = -1
+            self.crt.root.quit()
         elif event.char == 'x':
             self.crt.root.quit()
         elif event.char == 'h':
@@ -342,7 +389,7 @@ s \t: smooth
 
         dsx = seg1.x - seg2.x
         dsy = seg1.y - seg2.y
-        m = sqr(dsx) + sqr(dsy)
+        m = dsx * dsx + dsy * dsy
         dx = ori.x - ext.x
 
         dy = ori.y - ext.y
@@ -353,11 +400,12 @@ s \t: smooth
         B = ori.y - (S * seg1.x + C * seg1.y * anti)
 
         # on a : x' = C*x-S*y*anti+A  et  y' = S*x+C*y*anti+B
-        transf = lambda p: point2D(C * p.x - S * p.y * anti + A, S * p.x + C * p.y * anti + B)
+        transf = lambda p: Point2D(C * p.x - S * p.y * anti + A, S * p.x + C * p.y * anti + B)
 
         if not self.debug:
             pts = []
-
+            premier = len(self.points) == 0
+            
             if inverse:
                 ori = None
                 for i in reversed(self.fractale.gen):
@@ -366,7 +414,8 @@ s \t: smooth
                         ext = p
                         if ordre == 0:
                             # self.crt.ligne(ori, ext, self.couleur)
-                            if len(self.points) == 0:
+                            if premier:
+                                premier = False
                                 pts.append(ori)
                             pts.append(ext)
                         else:
@@ -382,7 +431,8 @@ s \t: smooth
                         ext = p
                         if ordre == 0:
                             # self.crt.ligne(ori, ext, self.couleur)
-                            if len(self.points) == 0:
+                            if premier:
+                                premier = False
                                 pts.append(ori)
                             pts.append(ext)
                         else:
@@ -440,10 +490,26 @@ def main():
     parser = argparse.ArgumentParser(description='Courbes Fractales')
     parser.add_argument("-v", "--verbose", action="store_true")
     parser.add_argument("-l", "--level", type=int, default=0)
-    parser.add_argument("nom", help="Nom de la fractale", nargs='?', default="Koch")
+    parser.add_argument("-L", "--list", help="liste les fractales connues", action="store_true")
+    parser.add_argument("-f", "--file", help="fichier de définition des fractales", default="fractales.xml")
+    parser.add_argument("nom", help="nom de la fractale", nargs='?', default="Koch")
     args = parser.parse_args()
 
-    Dessine(args.nom, args.verbose, generation=args.level)
+    courbes = Fractales(fichier=args.file)
+    
+    if args.list:
+        courbes.liste()
+        return
+
+    nom = args.nom
+    while True:
+        fractale = courbes.fractale(nom)
+        print(fractale.nom)
+        o = Dessine(fractale, args.verbose, generation=args.level)
+        if o.continuer == 0:
+            break
+        nom = courbes.cherche(nom, o.continuer)
+
 
 
 if __name__ == '__main__':
