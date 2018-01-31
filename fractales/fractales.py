@@ -14,6 +14,11 @@ from typing import NamedTuple
 import argparse
 import xml.etree.ElementTree as ET
 
+
+WINDOW_HEIGHT = 960
+WINDOW_WIDTH = 1280
+
+
 # contexte global et unique de Tk
 root_tk = None
 
@@ -37,13 +42,13 @@ class PointF(NamedTuple):
 class Fractale:
 
     def __init__(self, nom):
-        
+
         # valeurs par défaut
         self.max = 5                # génération maximale acceptable
         self.p1 = Point2D(-1, 0)
         self.p2 = Point2D(1, 0)
         self.limites = [-2.4, 2.4, -1.2, 3.6]
-        
+
         if nom is None:
             return
 
@@ -112,7 +117,7 @@ class Fractale:
             v = var.attrib['nom']
             x = var.attrib['valeur']
             locals[v] = evalm(x)
-        
+
         self.gen = []
         for p in child.find(u'générateur'):
             x = evalm(p.attrib['x'])
@@ -125,7 +130,7 @@ class Fractale:
         tag = child.find(u'génération')
         if tag is not None:
             self.max = int(tag.attrib.get('max'))
-        
+
         tag = child.find(u'tracé/point1')
         if tag is not None:
             self.p1 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
@@ -136,10 +141,10 @@ class Fractale:
 
         tag = child.find(u'tracé/limites')
         if tag is not None:
-            self.limites = [evalm(tag.attrib['min_x']), 
-                           evalm(tag.attrib['max_x']), 
+            self.limites = [evalm(tag.attrib['min_x']),
+                           evalm(tag.attrib['max_x']),
                            evalm(tag.attrib['min_y']),
-                           evalm(tag.attrib['max_y']) ] 
+                           evalm(tag.attrib['max_y']) ]
 
 class Fractales:
     def __init__(self, fichier="fractales.xml"):
@@ -162,7 +167,7 @@ class Fractales:
             return
         child = self.tree.getroot().find("fractale[nom='{}']".format(nom))
         return Fractale(child)
-       
+
     def cherche(self, nom, incr):
         i = self.definitions.index(nom) + incr
         if i >= 0 and i < len(self.definitions):
@@ -218,7 +223,7 @@ class Crt:
         ay2 = y2 - 10 * (y2 - y1) / longueur
         ax1 = ax2 - 6 * (y2 - y1) / longueur * signe_sens
         ay1 = ay2 + 6 * (x2 - x1) / longueur * signe_sens
-        self.canvas.create_polygon([x1, y1, x2, y2, ax1, ay1, ax2, ay2], 
+        self.canvas.create_polygon([x1, y1, x2, y2, ax1, ay1, ax2, ay2],
                                    outline="black", fill="red", width=1)
 
     def rond(self, p1):
@@ -265,7 +270,7 @@ class Crt:
             self.coords = self.canvas.create_text(4, 4, text=p.str(), anchor=tk.NW)
         self.canvas.bind("<Motion>", affiche_xy)
 
-        affiche_xy(Point2D(self.root.winfo_pointerx() - self.root.winfo_rootx(), 
+        affiche_xy(Point2D(self.root.winfo_pointerx() - self.root.winfo_rootx(),
                            self.root.winfo_pointery() - self.root.winfo_rooty()))
 
 class Dessine:
@@ -280,11 +285,12 @@ class Dessine:
 
         limites = self.fractale.limites
 
+
         ratio_width_height = abs((limites[1] - limites[0]) / (limites[3] - limites[2]))
-        h = 600
+        h = WINDOW_HEIGHT
         w = h * ratio_width_height
-        if w > 1024:
-            w = 1024
+        if w > WINDOW_WIDTH:
+            w = WINDOW_WIDTH
             h = w / ratio_width_height
 
         self.crt = Crt(w, h)
@@ -369,6 +375,8 @@ r \t: tracer le repère
 u \t: rafraîchir l'affichage
 s \t: smooth
 """)
+        elif event.char == 'p':
+            self.crt.canvas.postscript(colormode='color', file='{}_{}{}.ps'.format(self.fractale.nom, self.generation, '_d' if self.debug else ''))
 
         if self.generation != old_generation:
             self.dessine()
@@ -405,7 +413,7 @@ s \t: smooth
         if not self.debug:
             pts = []
             premier = len(self.points) == 0
-            
+
             if inverse:
                 ori = None
                 for i in reversed(self.fractale.gen):
@@ -496,7 +504,7 @@ def main():
     args = parser.parse_args()
 
     courbes = Fractales(fichier=args.file)
-    
+
     if args.list:
         courbes.liste()
         return
