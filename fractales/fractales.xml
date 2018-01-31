@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fractales>
+    <fractale>
+        <nom>Mandelbrot</nom>
+        <description>«courbe de Mandelbrot» : exemple d'une courbe de Peano</description>
+        <générateur>
+            <point x="-1" y="0" sens="False"/>
+            <point x="-2/3" y="sqrt(3)/3" sens="True"/>
+            <point x="-1/3" y="2*sqrt(3)/3" sens="True"/>
+            <point x="1/3" y="2*sqrt(3)/3" sens="True"/>
+            <point x="2/3" y="sqrt(3)/3" sens="True"/>
+            <point x="1/3" y="4*sqrt(3)/9" sens="False"/>
+            <point x="0" y="5*sqrt(3)/9" sens="False"/>
+            <point x="-1/3" y="4*sqrt(3)/9" sens="False"/>
+            <point x="-1/3" y="2*sqrt(3)/9" sens="True"/>
+            <point x="1/3" y="2*sqrt(3)/9" sens="True"/>
+            <point x="0" y="sqrt(3)/9" sens="False"/>
+            <point x="-1/3" y="0" sens="False"/>
+            <point x="1/3" y="0" sens="True"/>
+            <point x="1" y="0"/>
+        </générateur>
+        <génération max="4"/>
+        <tracé>
+            <point1 x="-1.5" y="0"/>
+            <point2 x="1.5" y="0"/>
+            <limites min_x="-1.5" max_x="1.5" min_y="-sqrt(3)/2" max_y="3*sqrt(3)/2"/>
+        </tracé>
+    </fractale>
+    <fractale>
+        <nom>Koch</nom>
+        <générateur>
+            <point x="-1" y="0"/>
+            <point x="-1/3" y="0"/>
+            <point x="0" y="sqrt(3)/3"/>
+            <point x="1/3" y="0"/>
+            <point x="1" y="0"/>
+        </générateur>
+        <génération max="7"/>
+        <tracé>
+            <point1 x="-1.5" y="0" />
+            <point2 x="1.5" y="0" />
+            <limites min_x="-1.5" max_x="1.5" min_y="0" max_y="sqrt(3)/2"/>
+        </tracé>
+    </fractale>
+    <!-- Cesaro -->
+    <fractale>
+        <nom>Cesaro</nom>
+        <description/>
+        <variables>
+            <variable nom="alpha" valeur="radians(85)" description="angle de la pointe, 60° pour von Koch"/>
+            <variable nom="a" valeur="1/(1+cos(alpha))" description="longueur de chaque segment _/\_"/>
+        </variables>
+        <générateur>
+            <point x="-1" y="0"/>
+            <point x="-1+a" y="0"/>
+            <point x="0" y="sin(alpha)"/>
+            <point x="1-a" y="0"/>
+            <point x="1" y="0"/>
+        </générateur>
+        <tracé>
+            <point1 x="-1" y="0" />
+            <point2 x="1" y="0" />
+            <limites min_x="-1" max_x="1" min_y="-1" max_y="1"/>
+        </tracé>
+    </fractale>
+    <fractale>
+        <nom>Peano</nom>
+        <description/>
+        <générateur>
+            <point x="-3" y="0" />
+            <point x="-1" y="0" />
+            <point x="-1" y="2" />
+            <point x="1" y="2" />
+            <point x="1" y="0" />
+            <point x="1" y="-2" />
+            <point x="-1" y="-2" />
+            <point x="-1" y="0" />
+            <point x="1" y="0" />
+            <point x="3" y="0" />
+        </générateur>
+        <génération max="5"/>
+        <tracé>
+            <point1 x="-1" y="0" />
+            <point2 x="1" y="0" />
+            <limites min_x="-1" max_x="1" min_y="-1" max_y="1"/>
+        </tracé>
+    </fractale>
+    <fractale>
+        <nom>Dragon Curve</nom>
+        <description>https://fr.wikipedia.org/wiki/Courbe_du_dragon</description>
+        <générateur>
+            <point x="0" y="0"/>
+            <point x="0" y="1" inverse="True"/>
+            <point x="1" y="1"/>
+        </générateur>
+        <génération max="20"/>
+        <tracé>
+            <point1 x="0" y="0"/>
+            <point2 x="1" y="1"/>
+            <limites min_x="-2/3" max_x="4/3" min_y="-1/3" max_y="4/3"/>
+        </tracé>
+    </fractale>
+    <fractale>
+        <nom>Polya Sweep</nom>
+        <description/>
+        <générateur>
+            <point x="0" y="0" sens="False"/>
+            <point x="0" y="1" sens="False"/>
+            <point x="1" y="1"/>>
+        </générateur>
+        <génération max="20"/>
+        <tracé>
+            <point1 x="0" y="1"/>
+            <point2 x="0" y="0"/>
+            <limites min_x="0" max_x="0.5" min_y="0" max_y="1"/>
+        </tracé>
+    </fractale>
+    <fractale>
+        <nom>V1 Dragon</nom>
+        <description/>
+        <générateur>
+            <point x="0" y="0" inverse="False"/>
+            <point x="1" y="1" inverse="True"/>
+            <point x="2" y="1" inverse="False"/>
+            <point x="2" y="0"/>
+        </générateur>
+        <génération max="9"/>
+        <tracé>
+            <point1 x="-1" y="0"/>
+            <point2 x="1" y="0"/>
+            <limites min_x="-2" max_x="2" min_y="-0.5" max_y="2"/>
+        </tracé>
+    </fractale>
+    <fractale>
+        <nom>Carbajo</nom>
+        <description/>
+        <générateur>
+            <point x="0" y="0" inverse="True"/>
+            <point x="1" y="1" inverse="False"/>
+            <point x="2" y="1" inverse="False"/>
+            <point x="2" y="0"/>
+        </générateur>
+        <génération max="10"/>
+        <tracé>
+            <point1 x="-1" y="0"/>
+            <point2 x="1" y="0"/>
+            <limites min_x="-1.5" max_x="2" min_y="-1" max_y="2"/>
+        </tracé>
+    </fractale>
+    <fractale>
+        <nom>Dragon of Eve</nom>
+        <description>http://fractalcurves.com/all_curves/4G_family.html</description>
+        <générateur>
+            <point x="0" y="0" inverse="False"/>
+            <point x="0" y="1" inverse="False"/>
+            <point x="1" y="0" inverse="True"/>
+            <point x="2" y="0"/>
+        </générateur>
+        <génération max="10"/>
+        <tracé>
+            <point1 x="-1" y="0"/>
+            <point2 x="1" y="0"/>
+            <limites min_x="-2" max_x="1.5" min_y="-1" max_y="2"/>
+        </tracé>
+    </fractale>
+    <fractale>
+        <nom>Peano Sweep</nom>
+        <description/>
+        <générateur>
+            <point x="0" y="0" inverse="True"/>
+            <point x="0" y="1" />
+            <point x="1" y="1" />
+            <point x="2" y="1" inverse="True"/>
+            <point x="2" y="0"/>
+        </générateur>
+        <génération max="10"/>
+        <tracé>
+            <point1 x="-1" y="0"/>
+            <point2 x="1" y="0"/>
+            <limites min_x="-1" max_x="1" min_y="0" max_y="2"/>
+        </tracé>
+    </fractale>
+    <fractale>
+        <nom>Gosper Curve</nom>
+        <variables>
+            <variable nom="a" valeur="sqrt(3)/2"/>
+        </variables>
+        <générateur>
+            <point x="0" y="0"/>
+            <point x="1" y="0" inverse="True"/>
+            <point x="1.5" y="a" inverse="True"/>
+            <point x="0.5" y="a"/>
+            <point x="0" y="2*a"/>
+            <point x="1" y="2*a"/>
+            <point x="2" y="2*a" inverse="True"/>
+            <point x="2.5" y="a"/>
+        </générateur>
+        <génération max="6"/>
+        <tracé>
+            <point1 x="0" y="0"/>
+            <point2 x="2.5" y="a"/>
+            <limites min_x="-0.6" max_x="2.6" min_y="-0.3" max_y="2.62"/>
+        </tracé>
+    </fractale>
+</fractales>
