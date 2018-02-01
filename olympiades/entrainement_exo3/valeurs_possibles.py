@@ -33,8 +33,13 @@ def possibles(M):
     print("valeurs possibles pour 1 ≤ N ≤ %d : %r" % (M, valeurs))
 
 
-if len(sys.argv) >= 2:
-    M = int(sys.argv[1])
-    possibles(M)
-else:
-    possibles(1000)
+def main():
+    if len(sys.argv) >= 2:
+        M = int(sys.argv[1])
+        possibles(M)
+    else:
+        possibles(1000)
+
+
+if __name__ == '__main__':
+    main()
