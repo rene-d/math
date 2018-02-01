@@ -45,11 +45,7 @@ class Fractale:
     def __init__(self, nom=None):
 
         # valeurs par défaut
-        self.max = 5                # génération maximale acceptable
-        self.limites = [-2.4, 2.4, -1.2, 3.6]
-        self.segments = [[Point2D(-1, 0), Point2D(1, 0)]]
-
-        if not isinstance(nom, str):
+        if  isinstance(nom, ET.Element):
             self.from_xml(nom)
             return
 
