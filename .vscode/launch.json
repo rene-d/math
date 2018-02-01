@@ -10,8 +10,11 @@
             "request": "launch",
             "stopOnEntry": true,
             "pythonPath": "${config:python.pythonPath}",
-            "program": "${file} -v",
-            "cwd": "${workspaceFolder}",
+            "program": "${file}",
+            "args": [
+                "-v"
+            ],
+            "cwd": "${workspaceFolder}/fractales",
             "env": {},
             "envFile": "${workspaceFolder}/.env",
             "debugOptions": [
