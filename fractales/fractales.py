@@ -6,6 +6,7 @@ https://fr.wikipedia.org/wiki/Flocon_de_Koch
 http://www.fractalcurves.com/
 """
 
+import sys
 import time
 import math
 import tkinter as tk
@@ -15,9 +16,9 @@ import argparse
 import xml.etree.ElementTree as ET
 
 
-WINDOW_HEIGHT = 720
-WINDOW_WIDTH = 1280
-
+if sys.version_info < (3,6):
+    print("Désolé, il faut au moins Python 3.6")
+    sys.exit(2)
 
 # contexte global et unique de Tk
 root_tk = None
@@ -44,10 +45,9 @@ class Fractale:
     def __init__(self, nom=None):
 
         # valeurs par défaut
-        #self.max = 5                # génération maximale acceptable
-        #self.p1 = Point2D(-1, 0)
-        #self.p2 = Point2D(1, 0)
-        #self.limites = [-2.4, 2.4, -1.2, 3.6]
+        self.max = 5                # génération maximale acceptable
+        self.limites = [-2.4, 2.4, -1.2, 3.6]
+        self.segments = [[Point2D(-1, 0), Point2D(1, 0)]]
 
         if not isinstance(nom, str):
             self.from_xml(nom)
@@ -55,15 +55,14 @@ class Fractale:
 
         self.nom = "Koch"
         self.gen = [
-            PointF(-1, 0),            # 0
-            PointF(-1 / 3, 0),        # 1
-            PointF(0, math.sqrt(3) / 3),   # 2
-            PointF(1 / 3, 0),         # 3
-            PointF(1, 0),             # 4
+            PointF(-1, 0),               # 0
+            PointF(-1 / 3, 0),           # 1
+            PointF(0, math.sqrt(3) / 3), # 2
+            PointF(1 / 3, 0),            # 3
+            PointF(1, 0),                # 4
         ]
         self.max = 7
-        self.p1 = Point2D(-1.5, 0)
-        self.p2 = Point2D(1.5, 0)
+        self.segments = [ [Point2D(-1.5, 0), Point2D(1.5, 0)] ]
         self.limites = [-1.5, 1.5, 0, math.sqrt(3) / 2]
 
     def from_xml(self, child):
@@ -103,11 +102,27 @@ class Fractale:
 
         tag = child.find(u'tracé/point1')
         if tag is not None:
-            self.p1 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
+            p1 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
 
-        tag = child.find(u'tracé/point2')
-        if tag is not None:
-            self.p2 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
+            tag = child.find(u'tracé/point2')
+            if tag is not None:
+                p2 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
+
+                self.segments = [[p1, p2]]
+
+        segments = []
+        for segment in child.findall(u'tracé/segments/segment'):
+
+            tag = segment.find("point1")
+            p1 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
+
+            tag = segment.find("point2")
+            p2 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
+
+            segments.append([p1, p2])
+
+        if len(segments) > 0:
+            self.segments = segments
 
         tag = child.find(u'tracé/limites')
         if tag is not None:
@@ -157,12 +172,11 @@ class Crt:
         width = screen_width * 0.9
         height = screen_height * 0.9
 
-        width = height * ratio_width_height
         if height * ratio_width_height > width:
             height = width / ratio_width_height
         else:
             width = height * ratio_width_height
-        
+
         self.dimensions = [width, height]
 
         self.canvas = tk.Canvas(self.root, width=width, height=height,
@@ -266,6 +280,7 @@ class Dessine:
         self.fractale = fractale
 
         self.smooth = False
+        self.auto_sauve = False
 
         limites = self.fractale.limites
 
@@ -288,16 +303,20 @@ class Dessine:
 
         print("dessine {} gen {}".format(self.fractale.nom, self.generation))
         self.couleur = "black" if self.generation == 0 else "red"
-
-        self.points = []
         self.minx, self.maxx, self.miny, self.maxy = 0, 0, 0, 0
 
-        self.dessinefractale(self.fractale.p1, self.fractale.p2, True, self.generation)
+        for segment in self.fractale.segments:
+            self.points = []
+
+            self.dessinefractale(segment[0], segment[1], True, self.generation)
+
+            if len(self.points) > 0 and not self.debug:
+                # print(self.points)
+                # x, y = self.points[0], self.points[1]
+                # self.crt.canvas.create_oval(x - 4, y - 4, x + 4, y + 4)
+                self.crt.canvas.create_line(self.points, smooth=self.smooth)
+
         if len(self.points) > 0 and not self.debug:
-            # print(self.points)
-            # x, y = self.points[0], self.points[1]
-            # self.crt.canvas.create_oval(x - 4, y - 4, x + 4, y + 4)
-            self.crt.canvas.create_line(self.points, smooth=self.smooth)
             print(self.minx, self.maxx, self.miny, self.maxy, len(self.points) // 2)
 
         self.crt.canvas.update()
@@ -305,9 +324,13 @@ class Dessine:
         duree = time.time() - start_time
 
         self.crt.root.wm_title("Fractale : {} [{:.3f} secondes]".format(self.titre(), duree))
+
+        if self.auto_sauve:
+            self.sauve()
+
         if duree > 4:
             self.fractale.max = self.generation
-        # self.sauve()
+
         self.crt.bind_key(self.callback)
 
     def titre(self):
@@ -343,12 +366,12 @@ class Dessine:
         elif event.keysym == 'Prior':
             self.continuer = -1
             self.crt.root.quit()
-        elif event.char == 'x':
+        elif event.char == 'x' or event.char == 'q':
             self.crt.root.quit()
         elif event.char == 'h':
             mbox.showinfo("Fractales", """
 h \t: cette aide
-x \t: sortir
+x, q \t: sortir
 + / → \t: avancer d'une génération
 - / ← \t: reculer d'une génération
 0 \t: génération 0 (graine)
@@ -356,8 +379,12 @@ v \t: voir les points de construction
 r \t: tracer le repère
 u \t: rafraîchir l'affichage
 s \t: smooth
+p \t: sauver le dessin en PostScript
 """)
         elif event.char == 'p':
+            self.sauve()
+        elif event.char == 'P':
+            self.auto_sauve = not self.auto_sauve
             self.sauve()
 
         if self.generation != old_generation:
@@ -365,11 +392,11 @@ s \t: smooth
 
     def sauve(self):
         fichier = '{}_{}'.format(self.fractale.nom, self.generation)
-        if self.smooth: fichier += '_smooth'
+        if self.smooth: fichier += '_lisse'
         if self.debug: fichier += '_d'
         fichier += ".ps"
-     
-        #TODO déplacer cette portion dans Crt
+
+        # TODO déplacer cette portion dans Crt
         self.crt.canvas.create_text(
                 self.crt.canvas.winfo_width() / 2,
                 self.crt.canvas.winfo_height() - 4,
@@ -378,16 +405,17 @@ s \t: smooth
                 justify=tk.CENTER,
                 anchor=tk.S,
                 font=('Helvetica', '14', 'italic') )
-        
+
         self.crt.canvas.postscript(colormode='color', file=fichier)
-        print("Canevas sauvegardé dans", fichier)        
+        print("Canevas sauvegardé dans", fichier)
 
     def dessinefractale(self, ori, ext, sensf, ordre, inverse=False, fill="red"):
-        # calcul coefficients de la transformation : [seg1,seg2] --> [ori,ext]
 
         # print("dessinefractale", ori, ext, ordre, sensf, inverse)
         if inverse:
             ori, ext = ext, ori
+
+        # calcul coefficients de la transformation : [seg1,seg2] --> [ori,ext]
 
         # sensf=true  => similitude directe
         # sensf=false => similitude indirecte
@@ -514,12 +542,10 @@ def main():
     nom = args.nom
     while True:
         fractale = courbes.fractale(nom)
-        print(fractale.nom)
         o = Dessine(fractale, args.verbose, generation=args.level)
         if o.continuer == 0:
             break
         nom = courbes.cherche(nom, o.continuer)
-
 
 
 if __name__ == '__main__':
