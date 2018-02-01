@@ -181,7 +181,8 @@
         </tracé>
     </fractale>
     <fractale>
-        <nom>Gosper Curve</nom>
+        <nom>Courbe de Gosper</nom>
+        <description>https://fr.wikipedia.org/wiki/Courbe_de_Gosper</description>>
         <variables>
             <variable nom="a" valeur="sqrt(3)/2"/>
         </variables>
