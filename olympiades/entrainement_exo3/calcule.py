@@ -50,10 +50,15 @@ def calcule(N):
     return R
 
 
-if len(sys.argv) >= 2:
-    for N in sys.argv[1:]:
-        N = int(N)
-        print("%5d ->  %3d " % (N, calcule(N)))
-else:
-    calcule(15)
-    calcule(2015)
+def main():
+    if len(sys.argv) >= 2:
+        for N in sys.argv[1:]:
+            N = int(N)
+            print("%5d ->  %3d " % (N, calcule(N)))
+    else:
+        calcule(15)
+        calcule(2015)
+
+
+if __name__ == '__main__':
+    main()
