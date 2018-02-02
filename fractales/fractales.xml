@@ -238,11 +238,11 @@
         <génération max="7"/>
         <tracé>
             <segments>
-                <segment><point2 x="-1" y="0"/><point1 x="1" y="0"/></segment>
-                <segment><point2 x="1" y="0"/><point1 x="0" y="-sqrt(3)"/></segment>
-                <segment><point2 x="0" y="-sqrt(3)"/><point1 x="-1" y="0"/></segment>
+                <segment><point1 x="-1" y="0"/><point2 x="1" y="0"/></segment>
+                <segment><point1 x="1" y="0"/><point2 x="0" y="sqrt(3)"/></segment>
+                <segment><point1 x="0" y="sqrt(3)"/><point2 x="-1" y="0"/></segment>
             </segments>
-            <limites min_x="-1" max_x="1" min_y="-sqrt(3)" max_y="0"/>
+            <limites min_x="-1" max_x="1" min_y="0" max_y="sqrt(3)"/>
         </tracé>
     </fractale>
 </fractales>
