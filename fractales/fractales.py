@@ -84,7 +84,7 @@ class Fractale:
             variables[v] = evalm(x)
 
         self.gen = []
-        for p in child.find(u'générateur'):
+        for p in child.find('generateur'):
             x = evalm(p.attrib['x'])
             y = evalm(p.attrib['y'])
             sens = tobool(p.attrib.get('sens', 'True'))
@@ -92,22 +92,22 @@ class Fractale:
             p = PointF(x, y, sens, inverse)
             self.gen.append(p)
 
-        tag = child.find(u'génération')
+        tag = child.find('generation')
         if tag is not None:
             self.max = int(tag.attrib.get('max'))
 
-        tag = child.find(u'tracé/point1')
+        tag = child.find('trace/point1')
         if tag is not None:
             p1 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
 
-            tag = child.find(u'tracé/point2')
+            tag = child.find(u'trace/point2')
             if tag is not None:
                 p2 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
 
                 self.segments = [[p1, p2]]
 
         segments = []
-        for segment in child.findall(u'tracé/segments/segment'):
+        for segment in child.findall(u'trace/segments/segment'):
 
             tag = segment.find("point1")
             p1 = Point2D(evalm(tag.attrib['x']), evalm(tag.attrib['y']))
@@ -120,7 +120,7 @@ class Fractale:
         if len(segments) > 0:
             self.segments = segments
 
-        tag = child.find(u'tracé/limites')
+        tag = child.find(u'trace/limites')
         if tag is not None:
             self.limites = [evalm(tag.attrib['min_x']),
                             evalm(tag.attrib['max_x']),
