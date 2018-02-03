@@ -58,11 +58,23 @@ class Fractale:
             PointF(1, 0),                # 4
         ]
         self.max = 7
-        self.segments = [ [Point2D(-1.5, 0), Point2D(1.5, 0)] ]
-        self.limites = [-1.5, 1.5, 0, math.sqrt(3) / 2]
+        self.init_trace()
+
+    def init_trace(self):
+        # par défaut: premier et dernier point du générateur
+        self.segments = [[Point2D(self.gen[0].x, self.gen[0].y),
+                          Point2D(self.gen[-1].x, self.gen[-1].y)]]
+
+        # par défaut: les min et max des x,y du générateur
+        xmin = xmax = ymin = ymax = None
+        for i in self.gen:
+            if xmin is None or xmin > i.x: xmin = i.x
+            if xmax is None or xmax < i.x: xmax = i.x
+            if ymin is None or ymin > i.y: ymin = i.y
+            if ymax is None or ymax < i.y: ymax = i.y
+        self.limites = [xmin, xmax, ymin, ymax]
 
     def from_xml(self, child):
-
         variables = {}
 
         def evalm(x):
@@ -129,14 +141,18 @@ class Fractale:
 
 class Fractales:
     def __init__(self, fichier="fractales.xml"):
-        tree = ET.parse(fichier)
-        root = tree.getroot()
+        try:
+            tree = ET.parse(fichier)
+            root = tree.getroot()
 
-        if root.tag != "fractales":
-            return
+            if root.tag != "fractales":
+                return
 
-        self.definitions = [i.find('nom').text for i in root.findall("fractale[nom]")]
-        self.tree = tree
+            self.definitions = [i.find('nom').text for i in root.findall("fractale[nom]")]
+            self.tree = tree
+
+        except FileNotFoundError:
+            self.tree = None
 
     def liste(self):
         for i in self.definitions:
@@ -235,6 +251,9 @@ class Crt:
         self.canvas.unbind("<Motion>")
         self.canvas.unbind("<Key>")
 
+    def titre(self, texte):
+        self.root.wm_title(texte)
+
     def bind_key(self, callback):
         if callback is not None:
             self.canvas.bind("<Key>", callback)
@@ -268,8 +287,8 @@ class Crt:
                            self.root.winfo_pointery() - self.root.winfo_rooty()))
 
 class Dessine:
-    def __init__(self, fractale, debug=False, generation=0):
-        self.debug = debug
+    def __init__(self, fractale, details=False, generation=0):
+        self.details = details
         self.continuer = 0
 
         self.generation = generation
@@ -279,22 +298,22 @@ class Dessine:
         self.auto_sauve = False
 
         limites = self.fractale.limites
-
         ratio_width_height = abs((limites[1] - limites[0]) / (limites[3] - limites[2]))
 
-        self.crt = Crt(ratio_width_height)
-        self.crt.set_coords(*self.fractale.limites)
+        self.crt = crt = Crt(ratio_width_height)
+        crt.set_coords(*self.fractale.limites)
         self.dessine()
 
-        self.crt.canvas.focus_set()
-        self.crt.root.mainloop()
-        self.crt.canvas.destroy()
+        crt.canvas.focus_set()
+        crt.root.mainloop()
+        crt.canvas.destroy()
 
     def dessine(self):
-        self.crt.bind_key(None)
-        self.crt.clear()
-        self.crt.root.wm_title("Fractale : {} - génération {} [en cours...]".format(
-                               self.fractale.nom, self.generation))
+        crt = self.crt
+        crt.bind_key(None)
+        crt.clear()
+        crt.titre("Fractale : {} - génération {} [en cours...]".format(
+                          self.fractale.nom, self.generation))
         start_time = time.time()
 
         print("dessine {} gen {}".format(self.fractale.nom, self.generation))
@@ -306,20 +325,20 @@ class Dessine:
 
             self.dessinefractale(segment[0], segment[1], True, self.generation)
 
-            if len(self.points) > 0 and not self.debug:
+            if len(self.points) > 0 and not self.details:
                 # print(self.points)
                 # x, y = self.points[0], self.points[1]
                 # self.crt.canvas.create_oval(x - 4, y - 4, x + 4, y + 4)
-                self.crt.canvas.create_line(self.points, smooth=self.smooth)
+                crt.canvas.create_line(self.points, smooth=self.smooth)
 
-        if len(self.points) > 0 and not self.debug:
+        if len(self.points) > 0 and not self.details:
             print(self.minx, self.maxx, self.miny, self.maxy, len(self.points) // 2)
 
         self.crt.canvas.update()
 
         duree = time.time() - start_time
 
-        self.crt.root.wm_title("Fractale : {} [{:.3f} secondes]".format(self.titre(), duree))
+        crt.titre("Fractale : {} [{:.3f} secondes]".format(self.titre(), duree))
 
         if self.auto_sauve:
             self.sauve()
@@ -327,7 +346,7 @@ class Dessine:
         if duree > 4:
             self.fractale.max = self.generation
 
-        self.crt.bind_key(self.callback)
+        crt.bind_key(self.callback)
 
     def titre(self):
         return "{} {}- génération {}".format(self.fractale.nom,
@@ -351,7 +370,7 @@ class Dessine:
             old_generation = None
             self.generation = 0
         elif event.char == 'v':
-            self.debug = not self.debug
+            self.details = not self.details
             old_generation = None
         elif event.char == 's':
             self.smooth = not self.smooth
@@ -389,7 +408,7 @@ p \t: sauver le dessin en PostScript
     def sauve(self):
         fichier = '{}_{}'.format(self.fractale.nom, self.generation)
         if self.smooth: fichier += '_lisse'
-        if self.debug: fichier += '_d'
+        if self.details: fichier += '_d'
         fichier += ".ps"
 
         # TODO déplacer cette portion dans Crt
@@ -417,8 +436,8 @@ p \t: sauver le dessin en PostScript
         # sensf=false => similitude indirecte
         anti = 1 if sensf else -1
 
-        seg1 = self.fractale.gen[0]
-        seg2 = self.fractale.gen[-1]
+        seg1 = self.fractale.gen[0]     # premier point
+        seg2 = self.fractale.gen[-1]    # dernier point
 
         dsx = seg1.x - seg2.x
         dsy = seg1.y - seg2.y
@@ -435,7 +454,7 @@ p \t: sauver le dessin en PostScript
         # on a : x' = C*x-S*y*anti+A  et  y' = S*x+C*y*anti+B
         transf = lambda p: Point2D(C * p.x - S * p.y * anti + A, S * p.x + C * p.y * anti + B)
 
-        if not self.debug:
+        if not self.details:
             pts = []
             premier = len(self.points) == 0
 
@@ -538,7 +557,7 @@ def main():
     nom = args.nom
     while True:
         fractale = courbes.fractale(nom)
-        o = Dessine(fractale, args.verbose, generation=args.level)
+        o = Dessine(fractale, details=args.verbose, generation=args.level)
         if o.continuer == 0:
             break
         nom = courbes.cherche(nom, o.continuer)
