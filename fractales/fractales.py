@@ -153,8 +153,11 @@ class Fractales:
 
         except FileNotFoundError:
             self.tree = None
+            self.definitions = None
 
     def liste(self):
+        if self.definitions is None:
+            return
         for i in self.definitions:
             f = self.fractale(i)
             print("{:20s} {:2d} {}".format(i, len(f.gen), ""))
@@ -166,6 +169,8 @@ class Fractales:
         return Fractale(child)
 
     def cherche(self, nom, incr):
+        if self.definitions is None:
+            return
         i = self.definitions.index(nom) + incr
         if i >= 0 and i < len(self.definitions):
             nom = self.definitions[i]
