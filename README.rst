@@ -9,3 +9,9 @@ Programmes mathématiques
     :target: https://coveralls.io/github/rene-d/math?branch=master
 
 Divers petits programmes mathématiques
+
+olympiades : solutions informatiques à des exercices d'Olympiades collège
+
+fractales : courbes fractales
+
+divers : programmes de découverte de Python
