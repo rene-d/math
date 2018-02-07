@@ -9,9 +9,7 @@ Divers petits programmes mathématiques
 Solutions informatiques à des exercices d'[Olympiades](https://euler.ac-versailles.fr/webMathematica/clubs_compet/olympiades.htm) collège
 
 ## fractales
-Courbes fractales
-[http://www.fractalcurves.com/]
-[https://www.mathcurve.com/fractals/koch/koch.shtml]
+Courbes fractales (flocon de von Koch et autres)
 
 ## géométrie
 Quelques programmes tournant autour de la géométrie
