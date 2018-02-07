@@ -1,4 +1,4 @@
-#
+# flake8: noqa
 
 import platform
 import subprocess
@@ -12,6 +12,3 @@ def raise_app():
             '/usr/bin/osascript', '-e',
             'tell app "System Events" to set frontmost of every process whose unix id is {} to true'.format(os.getpid())
         ])
-
-
-to_front = raise_app

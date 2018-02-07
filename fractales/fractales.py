@@ -17,17 +17,19 @@ import xml.etree.ElementTree as ET
 from raise_app import *
 
 
-if sys.version_info < (3,6):
+if sys.version_info < (3, 6):
     print("Désolé, il faut au moins Python 3.6")
     sys.exit(2)
 
 # contexte global et unique de Tk
 root_tk = None
 
+
 class Point2D(NamedTuple):
     """ point dans le plan """
     x: float
     y: float
+
     def str(self):
         """ retourne les coordonnées pour affichage """
         return "{:.5f} x {:.5f}".format(self.x, self.y)
@@ -46,17 +48,17 @@ class Fractale:
     def __init__(self, nom=None):
 
         # valeurs par défaut
-        if  isinstance(nom, ET.Element):
+        if isinstance(nom, ET.Element):
             self.from_xml(nom)
             return
 
         self.nom = "Koch"
         self.gen = [
-            PointF(-1, 0),               # 0
-            PointF(-1 / 3, 0),           # 1
-            PointF(0, math.sqrt(3) / 3), # 2
-            PointF(1 / 3, 0),            # 3
-            PointF(1, 0),                # 4
+            PointF(-1, 0),                  # 0
+            PointF(-1 / 3, 0),              # 1
+            PointF(0, math.sqrt(3) / 3),    # 2
+            PointF(1 / 3, 0),               # 3
+            PointF(1, 0),                   # 4
         ]
         self.max = 7
         self.init_trace()
@@ -69,22 +71,28 @@ class Fractale:
         # par défaut: les min et max des x,y du générateur
         xmin = xmax = ymin = ymax = None
         for i in self.gen:
-            if xmin is None or xmin > i.x: xmin = i.x
-            if xmax is None or xmax < i.x: xmax = i.x
-            if ymin is None or ymin > i.y: ymin = i.y
-            if ymax is None or ymax < i.y: ymax = i.y
+            if xmin is None or xmin > i.x:
+                xmin = i.x
+            if xmax is None or xmax < i.x:
+                xmax = i.x
+            if ymin is None or ymin > i.y:
+                ymin = i.y
+            if ymax is None or ymax < i.y:
+                ymax = i.y
         self.limites = [xmin, xmax, ymin, ymax]
 
     def from_xml(self, child):
         variables = {}
 
-        def evalm(x):
-            return eval(x, { 'sqrt': math.sqrt,
-                             'sqr': lambda x: math.pow(x, 2),
-                             'sin': math.sin,
-                             'cos': math.cos,
-                             'radians': math.radians,
-                             'pi': math.pi }, variables)
+        def evalm(expression):
+            return eval(expression,
+                        {'sqrt': math.sqrt,
+                         'sqr': lambda x: math.pow(x, 2),
+                         'sin': math.sin,
+                         'cos': math.cos,
+                         'radians': math.radians,
+                         'pi': math.pi},
+                        variables)
 
         def tobool(s):
             return True if s.lower() == "true" else False
@@ -140,6 +148,7 @@ class Fractale:
                             evalm(tag.attrib['min_y']),
                             evalm(tag.attrib['max_y'])]
 
+
 class Fractales:
     def __init__(self, fichier="fractales.xml"):
         try:
@@ -177,12 +186,14 @@ class Fractales:
             nom = self.definitions[i]
         return nom
 
+
 class Crt:
     def __init__(self, ratio_width_height=1):
         global root_tk
 
-        if root_tk is None: root_tk = tk.Tk()
-        self.root = root_tk #tk.Tk()
+        if root_tk is None:
+            root_tk = tk.Tk()
+        self.root = root_tk
 
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
@@ -248,8 +259,8 @@ class Crt:
         self.canvas.create_oval(x1 - 2, y1 - 2, x1 + 2, y1 + 2)
 
     def conv_inverse(self, x, y):
-        rx = x  / self.coords_rect[2] + self.coords_rect[0]
-        ry = y  / self.coords_rect[3] + self.coords_rect[1]
+        rx = x / self.coords_rect[2] + self.coords_rect[0]
+        ry = y / self.coords_rect[3] + self.coords_rect[1]
         return Point2D(rx, ry)
 
     def clear(self):
@@ -292,6 +303,7 @@ class Crt:
         affiche_xy(Point2D(self.root.winfo_pointerx() - self.root.winfo_rootx(),
                            self.root.winfo_pointery() - self.root.winfo_rooty()))
 
+
 class Dessine:
     def __init__(self, fractale, details=False, generation=0):
         self.details = details
@@ -320,7 +332,7 @@ class Dessine:
         crt.bind_key(None)
         crt.clear()
         crt.titre("Fractale : {} - génération {} [en cours...]".format(
-                          self.fractale.nom, self.generation))
+                  self.fractale.nom, self.generation))
         start_time = time.time()
 
         print("dessine {} gen {}".format(self.fractale.nom, self.generation))
@@ -357,8 +369,8 @@ class Dessine:
 
     def titre(self):
         return "{} {}- génération {}".format(self.fractale.nom,
-                                               "(lissé) " if self.lisser else "",
-                                               self.generation)
+                                             "(lissé) " if self.lisser else "",
+                                             self.generation)
 
     def callback(self, event):
         # print("callback:", event)
@@ -414,19 +426,20 @@ p \t: sauver le dessin en PostScript
 
     def sauve(self):
         fichier = '{}_{}'.format(self.fractale.nom, self.generation)
-        if self.lisser: fichier += '_lisse'
-        if self.details: fichier += '_d'
+        if self.lisser:
+            fichier += '_lisse'
+        if self.details:
+            fichier += '_d'
         fichier += ".ps"
 
         # TODO déplacer cette portion dans Crt
-        self.crt.canvas.create_text(
-                self.crt.canvas.winfo_width() / 2,
-                self.crt.canvas.winfo_height() - 4,
-                text=self.titre(),
-                fill="blue",
-                justify=tk.CENTER,
-                anchor=tk.S,
-                font=('Helvetica', '14', 'italic') )
+        self.crt.canvas.create_text(self.crt.canvas.winfo_width() / 2,
+                                    self.crt.canvas.winfo_height() - 4,
+                                    text=self.titre(),
+                                    fill="blue",
+                                    justify=tk.CENTER,
+                                    anchor=tk.S,
+                                    font=('Helvetica', '14', 'italic'))
 
         self.crt.canvas.postscript(colormode='color', file=fichier)
         print("Canevas sauvegardé dans", fichier)
@@ -459,7 +472,8 @@ p \t: sauver le dessin en PostScript
         B = ori.y - (S * seg1.x + C * seg1.y * anti)
 
         # on a : x' = C*x-S*y*anti+A  et  y' = S*x+C*y*anti+B
-        transf = lambda p: Point2D(C * p.x - S * p.y * anti + A, S * p.x + C * p.y * anti + B)
+        def transf(p):
+            return Point2D(C * p.x - S * p.y * anti + A, S * p.x + C * p.y * anti + B)
 
         if not self.details:
             pts = []
@@ -478,7 +492,8 @@ p \t: sauver le dessin en PostScript
                                 pts.append(ori)
                             pts.append(ext)
                         else:
-                            self.dessinefractale(ori, ext, not i.sens ^ sensf, ordre - 1, not i.inverse)
+                            self.dessinefractale(ori, ext,
+                                                 not i.sens ^ sensf, ordre - 1, not i.inverse)
                     ori = p
             else:
                 ori = None
@@ -495,16 +510,21 @@ p \t: sauver le dessin en PostScript
                                 pts.append(ori)
                             pts.append(ext)
                         else:
-                            self.dessinefractale(ori, ext, not sens_ori ^ sensf, ordre - 1, inverse_ori)
+                            self.dessinefractale(ori, ext,
+                                                 not sens_ori ^ sensf, ordre - 1, inverse_ori)
                     ori = p
                     sens_ori = i.sens
                     inverse_ori = i.inverse
 
             for i in pts:
-                if i.x < self.minx: self.minx = i.x
-                if i.y < self.miny: self.miny = i.y
-                if i.x > self.maxx: self.maxx = i.x
-                if i.y > self.maxy: self.maxy = i.y
+                if i.x < self.minx:
+                    self.minx = i.x
+                if i.y < self.miny:
+                    self.miny = i.y
+                if i.x > self.maxx:
+                    self.maxx = i.x
+                if i.y > self.maxy:
+                    self.maxy = i.y
                 self.points.extend(self.crt.conv(i))
 
         else:
@@ -551,7 +571,8 @@ def main():
     parser.add_argument("-v", "--verbose", action="store_true")
     parser.add_argument("-l", "--level", type=int, default=0)
     parser.add_argument("-L", "--list", help="liste les fractales connues", action="store_true")
-    parser.add_argument("-f", "--file", help="fichier de définition des fractales", default="fractales.xml")
+    parser.add_argument("-f", "--file", help="fichier de définition des fractales",
+                        default="fractales.xml")
     parser.add_argument("nom", help="nom de la fractale", nargs='?', default="Koch")
     args = parser.parse_args()
 

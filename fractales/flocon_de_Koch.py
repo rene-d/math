@@ -4,7 +4,7 @@
 """ trace un flocon de Koch """
 
 import turtle
-import raise_app
+from raise_app import raise_app
 
 
 generation = 0
@@ -91,7 +91,7 @@ def main():                 # pragma: no cover
     turtle.onkey(turtle.bye, 'q')
 
     turtle.listen()
-    raise_app.to_front()
+    raise_app()
     turtle.mainloop()
 
 
