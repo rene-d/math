@@ -14,6 +14,7 @@ import tkinter.messagebox as mbox
 from typing import NamedTuple
 import argparse
 import xml.etree.ElementTree as ET
+from raise_app import *
 
 
 if sys.version_info < (3,6):
@@ -228,7 +229,7 @@ class Crt:
         x2, y2 = self.conv(p2)
         self.canvas.create_line(x1, y1, x2, y2, fill=fill, **kwargs)
 
-    def ligne2(self, p1, p2, sens=True, inverse=False):
+    def ligne_flechee(self, p1, p2, sens=True, inverse=False):
         if inverse:
             p1, p2 = p2, p1
         x1, y1 = self.conv(p1)
@@ -299,7 +300,7 @@ class Dessine:
         self.generation = generation
         self.fractale = fractale
 
-        self.smooth = False
+        self.lisser = False
         self.auto_sauve = False
 
         limites = self.fractale.limites
@@ -309,6 +310,7 @@ class Dessine:
         crt.set_coords(*self.fractale.limites)
         self.dessine()
 
+        raise_app()
         crt.canvas.focus_set()
         crt.root.mainloop()
         crt.canvas.destroy()
@@ -334,7 +336,7 @@ class Dessine:
                 # print(self.points)
                 # x, y = self.points[0], self.points[1]
                 # self.crt.canvas.create_oval(x - 4, y - 4, x + 4, y + 4)
-                crt.canvas.create_line(self.points, smooth=self.smooth)
+                crt.canvas.create_line(self.points, smooth=self.lisser)
 
         if len(self.points) > 0 and not self.details:
             print(self.minx, self.maxx, self.miny, self.maxy, len(self.points) // 2)
@@ -355,7 +357,7 @@ class Dessine:
 
     def titre(self):
         return "{} {}- génération {}".format(self.fractale.nom,
-                                               "(lissé) " if self.smooth else "",
+                                               "(lissé) " if self.lisser else "",
                                                self.generation)
 
     def callback(self, event):
@@ -378,7 +380,7 @@ class Dessine:
             self.details = not self.details
             old_generation = None
         elif event.char == 's':
-            self.smooth = not self.smooth
+            self.lisser = not self.lisser
             old_generation = None
         elif event.keysym == 'Next':
             self.continuer = 1
@@ -396,9 +398,9 @@ x, q \t: sortir
 - / ← \t: reculer d'une génération
 0 \t: génération 0 (graine)
 v \t: voir les points de construction
-r \t: tracer le repère
+r \t: tracer le repère et afficher X,Y
 u \t: rafraîchir l'affichage
-s \t: smooth
+s \t: lisser la courbe
 p \t: sauver le dessin en PostScript
 """)
         elif event.char == 'p':
@@ -412,7 +414,7 @@ p \t: sauver le dessin en PostScript
 
     def sauve(self):
         fichier = '{}_{}'.format(self.fractale.nom, self.generation)
-        if self.smooth: fichier += '_lisse'
+        if self.lisser: fichier += '_lisse'
         if self.details: fichier += '_d'
         fichier += ".ps"
 
@@ -520,7 +522,7 @@ p \t: sauver le dessin en PostScript
                         if self.generation <= 1:
                             # génération 0 ou 1: on trace des flèches indiquant comment va "germer"
                             # la graine sur chacun des segments
-                            self.crt.ligne2(ori, ext, sens=sens_ori, inverse=inverse_ori)
+                            self.crt.ligne_flechee(ori, ext, sens=sens_ori, inverse=inverse_ori)
                         else:
                             self.crt.ligne(ori, ext, self.couleur)
                     else:

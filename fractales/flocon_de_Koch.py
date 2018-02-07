@@ -4,6 +4,8 @@
 """ trace un flocon de Koch """
 
 import turtle
+import raise_app
+
 
 generation = 0
 taille = 400.0
@@ -35,11 +37,11 @@ def flocon(l, n):
 def dessine(l, n):          # pragma: no cover
     """ dessine l'étoile de Koch de génération n """
 
+    turtle.onkey(None, 'Left')
+    turtle.onkey(None, 'Right')
+
     turtle.reset()
     turtle.clear()
-
-    turtle.onscreenclick(None, 1)
-    turtle.onscreenclick(None, 3)
 
     turtle.hideturtle()
 
@@ -58,8 +60,8 @@ def dessine(l, n):          # pragma: no cover
     flocon(l, n)
     turtle.end_fill()
 
-    turtle.onscreenclick(suivant, 1)
-    turtle.onscreenclick(precedent, 3)
+    turtle.onkey(lambda: precedent(0, 0), 'Left')
+    turtle.onkey(lambda: suivant(0, 0), 'Right')
 
 
 def suivant(x, y):          # pragma: no cover
@@ -78,15 +80,18 @@ def precedent(x, y):        # pragma: no cover
 
 
 def main():                 # pragma: no cover
-    print("x: sortir")
-    print("clic gauche: augmenter la génération")
-    print("clic droit: diminuer la génération")
+    print("⟶ : augmenter la génération")
+    print("⟵ : diminuer la génération")
+    print(" x : sortir")
 
     # dessine une première étoile
     suivant(0, 0)
 
     turtle.onkey(turtle.bye, 'x')
+    turtle.onkey(turtle.bye, 'q')
+
     turtle.listen()
+    raise_app.to_front()
     turtle.mainloop()
 
 
