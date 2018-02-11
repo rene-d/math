@@ -59,3 +59,41 @@ def test_Dessine(mocker):
     # TODO: il faut hook crt.conv et create_line puis vérifier la génération
     fractales.Dessine(f, details=False, generation=1)
     assert crt.call_count == 1
+
+
+def test_callback(mocker):
+    from collections import namedtuple
+
+    event_type = namedtuple('TkEvent', ('char', 'keysym'))
+
+    o = namedtuple('Dessine', ('generation', 'fractale', 'dessine'))
+    o.generation = 5
+    o.dessine = lambda: None
+    o.fractale = namedtuple('Fractale', ('max'))
+    o.fractale.max = 6
+
+    mocker.patch.object(o, 'crt', create=True)
+
+    event = event_type('+', None)
+    fractales.Dessine.callback(o, event)
+    assert o.generation == 6
+
+    event = event_type('+', None)
+    fractales.Dessine.callback(o, event)
+    assert o.generation == 6
+
+    event = event_type('-', None)
+    fractales.Dessine.callback(o, event)
+    assert o.generation == 5
+
+    event = event_type(None, 'Right')
+    fractales.Dessine.callback(o, event)
+    assert o.generation == 6
+
+    event = event_type(None, 'Left')
+    fractales.Dessine.callback(o, event)
+    assert o.generation == 5
+
+    event = event_type('x', None)
+    fractales.Dessine.callback(o, event)
+    assert o.generation == 5
