@@ -1,6 +1,8 @@
+#! /usr/bin/env python3
 """
 Test la primalité d'un nombre
 """
+
 
 # saisie du nombre
 n = input('entrez le nombre à tester : ')

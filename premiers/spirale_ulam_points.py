@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 """
 Spirale d'Ulam
 

@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 """
 Affiche la liste des nombres premiers inférieurs à 300
 """

@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 """
 Spirale d'Ulam
 
@@ -6,6 +7,7 @@ https://fr.wikipedia.org/wiki/Spirale_d%27Ulam
 
 import tkinter as tk
 import time
+from raise_app import raise_app
 
 
 LENT = True
@@ -30,6 +32,7 @@ def premier(n):
 
 root = tk.Tk()
 root.wm_title("Spirale d'Ulam")
+raise_app()
 
 canvas = tk.Canvas(root, width=800, height=800)
 canvas.grid()
@@ -40,10 +43,10 @@ y = canvas.winfo_width() / 2
 
 n = 0
 C = 23
-c = (C - 1) // 2 - 1
+c = (C - 1) // 2 - 2
 
 
-def ligne(i, dx, dy):
+def ligne(i, dx, dy, couleur):
     global n, x, y
 
     for _ in range(i):
@@ -51,26 +54,27 @@ def ligne(i, dx, dy):
 
         n = n + 1
         if premier(n):
-            canvas.create_rectangle(x - c, y - c, x + c, y + c, fill="black", outline="black")
-            canvas.create_text(x, y, text=str(n), anchor=tk.CENTER, fill="white")
+            canvas.create_rectangle(x - c, y - c, x + c, y + c, fill=couleur, outline=couleur)
+            canvas.create_text(x, y, text=str(n), anchor=tk.CENTER, fill="white", font=('Arial', 8))
         else:
-            canvas.create_rectangle(x - c, y - c, x + c, y + c, fill="white", outline="black")
-            canvas.create_text(x, y, text=str(n), anchor=tk.CENTER, fill="black")
+            canvas.create_rectangle(x - c, y - c, x + c, y + c, fill="white", outline=couleur)
+            canvas.create_text(x, y, text=str(n), anchor=tk.CENTER, fill=couleur, font=('Arial', 8))
 
         x += dx * C
         y += dy * C
         if LENT:
-            time.sleep(0.01)
+            time.sleep(0.005)
             canvas.update()
 
 
 i = 1
 while (n + i * 4 + 2) < 1000:
-    ligne(i, 1, 0)
-    ligne(i, 0, -1)
+    print(i,n)
+    ligne(i, 1, 0, "black")
+    ligne(i, 0, -1, "green")
     i += 1
-    ligne(i, -1, 0)
-    ligne(i, 0, 1)
+    ligne(i, -1, 0, "blue")
+    ligne(i, 0, 1, "red")
     i += 1
 
 root.mainloop()
