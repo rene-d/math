@@ -69,7 +69,6 @@ def ligne(i, dx, dy, couleur):
 
 i = 1
 while (n + i * 4 + 2) < 1000:
-    print(i,n)
     ligne(i, 1, 0, "black")
     ligne(i, 0, -1, "green")
     i += 1

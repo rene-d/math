@@ -57,7 +57,7 @@ def affiche(n):
         if i == -1:
             return x
         else:
-            return x[0:i] + ''.join([exposants[int(c)] for c in x[i+1:]])
+            return x[0:i] + ''.join([exposants[int(c)] for c in x[i + 1:]])
 
     expr1 = ' ⨯ '.join([str(i) for i in facteurs])
     expr2 = ' ⨯ '.join([expo(i) for i in facteurs_reduits])
