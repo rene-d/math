@@ -6,7 +6,6 @@ import sys
 def decompose(n):
     """ décomposition d'un nombre en facteur premier """
 
-    initial = n
     facteurs = []
 
     i = 2
@@ -21,6 +20,12 @@ def decompose(n):
 
     if n != 1:
         facteurs.append(n)
+
+    return facteurs
+
+
+def reduit_polynome(facteurs):
+    """ réduit les facteurs premiers en puissance p*p*...*p en p^n """
 
     nb_facteurs = len(facteurs)
     facteurs_reduits = []
@@ -37,6 +42,14 @@ def decompose(n):
         else:
             facteurs_reduits.append('{}^{}'.format(f, e))
 
+    return facteurs_reduits
+
+
+def affiche(n):
+    """ affiche la décomposition en facteurs premiers d'un nombre """
+
+    facteurs = decompose(n)
+    facteurs_reduits = reduit_polynome(facteurs)
 
     def expo(x):
         exposants = '⁰¹²³⁴⁵⁶⁷⁸⁹'
@@ -49,19 +62,16 @@ def decompose(n):
     expr1 = ' ⨯ '.join([str(i) for i in facteurs])
     expr2 = ' ⨯ '.join([expo(i) for i in facteurs_reduits])
 
-    print(initial, '=', expr1, '=', expr2)
+    print('{} = {} = {}'.format(n, expr1, expr2))
 
-    verif1 = eval('*'.join([str(i) for i in facteurs]))
-    verif2 = eval('*'.join([i.replace("^", "**") for i in facteurs_reduits]))
-
-    assert initial == verif1
-    assert initial == verif2
-
-    return facteurs, facteurs_reduits
+    # auto-test !
+    assert n == eval('*'.join([str(i) for i in facteurs]))
+    assert n == eval('*'.join([i.replace("^", "**") for i in facteurs_reduits]))
 
 
 def main():
-    decompose(int(sys.argv[1]))
+    if len(sys.argv) > 1:
+        affiche(int(sys.argv[1]))
 
 
 if __name__ == '__main__':
