@@ -2,5 +2,6 @@ numpy
 pytest
 pytest-cov
 pytest-mock
+pytest-pythonpath
 coveralls
 flake8

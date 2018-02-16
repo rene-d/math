@@ -14,5 +14,8 @@ Courbes fractales (flocon de von Koch et autres)
 ## géométrie
 Quelques programmes tournant autour de la géométrie
 
+## premiers
+Programmes autour des nombres premiers
+
 ## divers
 Programmes d'initiation à Python
