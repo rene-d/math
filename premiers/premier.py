@@ -20,7 +20,7 @@ elif n % 2 == 0:
 else:
     i = 3
     est_premier = True
-    while i * i < n:
+    while i * i <= n:
         if n % i == 0:
             print(n, "est multiple de", i)
             est_premier = False

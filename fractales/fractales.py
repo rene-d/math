@@ -14,7 +14,7 @@ import tkinter.messagebox as mbox
 from typing import NamedTuple
 import argparse
 import xml.etree.ElementTree as ET
-from raise_app import *
+from raise_app import raise_app
 
 
 if sys.version_info < (3, 6):

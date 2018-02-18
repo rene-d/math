@@ -4,7 +4,7 @@ import sys
 
 
 def decompose(n):
-    """ décomposition d'un nombre en facteur premier """
+    """ décomposition d'un nombre en facteurs premiers """
 
     facteurs = []
 
