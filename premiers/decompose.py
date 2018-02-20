@@ -45,6 +45,28 @@ def reduit_polynome(facteurs):
     return facteurs_reduits
 
 
+def decompose2(n):
+    """ réduit les facteurs premiers en puissance p*p*...*p en p^n """
+
+    facteurs = decompose(n)
+    nb_facteurs = len(facteurs)
+    facteurs_reduits = []
+    i = 0
+    while i < nb_facteurs:
+        f = facteurs[i]
+        e = 1
+        i += 1
+        while i < nb_facteurs and f == facteurs[i]:
+            e += 1
+            i += 1
+        if e == 1:
+            facteurs_reduits.append((f, 1))
+        else:
+            facteurs_reduits.append((f, e))
+
+    return facteurs_reduits
+
+
 def affiche(n):
     """ affiche la décomposition en facteurs premiers d'un nombre """
 
@@ -71,7 +93,11 @@ def affiche(n):
 
 def main():
     if len(sys.argv) > 1:
-        affiche(int(sys.argv[1]))
+        for arg in sys.argv[1:]:
+            affiche(int(arg))
+    else:
+        n = int(input("Nombre à décomposer : "))
+        affiche(n)
 
 
 if __name__ == '__main__':

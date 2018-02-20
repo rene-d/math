@@ -10,7 +10,7 @@ primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41,
 
 def test_liste(mocker):
     for i in range(0, 100):
-        p = liste_premiers.premier(i)
+        p = liste_premiers.est_premier(i)
         assert p == (i in primes)
 
 

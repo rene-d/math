@@ -6,6 +6,7 @@ https://fr.wikipedia.org/wiki/Spirale_d%27Ulam
 """
 
 import tkinter as tk
+from raise_app import raise_app
 
 
 # teste si le nombre est premier
@@ -27,6 +28,7 @@ def premier(n):
 
 root = tk.Tk()
 root.wm_title("Spirale d'Ulam")
+raise_app()
 
 canvas = tk.Canvas(root, width=800, height=800)
 canvas.grid()

@@ -25,10 +25,17 @@ class bitfield:
         assert pos >= 0 and pos < self.taille
         return (self.bits[pos // 8] & (1 << (pos % 8))) != 0
 
+    def __getitem__(self, key):
+        return self.is_set(key)
+
+    def __setitem__(self, key, value):
+        return self.set(key, value)
+
 
 def cribler(n_max):
     """
-    Crible d'Eratosthène
+    Calcule les premiers inférieurs ou égaux à n_max
+    avec le crible d'Eratosthène
     """
 
     # crée un bitfield pour stocker la primalité des entiers de 2 à n
@@ -60,7 +67,6 @@ def cribler_opti(n_max):
     """
     Version optimisée: on ne considère pas les nombres pairs,
     ni les multiples pairs lors de l'élimination.
-    C'est apparemment le Crible de Sundaram: https://en.wikipedia.org/wiki/Sieve_of_Sundaram
     """
 
     # n_max impair (ex: 11) => (n-3)/2+1 nombres impairs à considérer
@@ -110,17 +116,45 @@ def cribler_opti(n_max):
     return premiers
 
 
-def main():
-    import cProfile as prof
+class Crible:
 
-    print("cribler".center(90, "-"))
-    prof.run('c1 = cribler(10000)')
+    def __init__(self, n_max):
+        self.n_max = n_max
 
-    print("cribler_opti".center(90, "-"))
-    prof.run('c2 = cribler_opti(10000)')
+        # même calcul que selon la version optimisée ci-dessus
+        self.maximum = n = (n_max - 3) // 2 + 1
+        self.crible = crible = bitfield(n)
 
-    assert c1 == c2     # noqa  c1 et c2 sont des globaux définis par les run() ci-dessus
+        i = 0
+        while i < n:
+            while i < n:
+                if not crible.is_set(i):
+                    break
+                i += 1
 
+            k = 3
+            while True:
+                j = k * i + 3 * (k - 1) // 2
+                if j >= n:
+                    break
+                crible.set(j, True)
+                k += 2
 
-if __name__ == '__main__':
-    main()
+            i += 1
+
+    def liste(self):
+        premiers = [2]
+        for i in range(1, self.maximum + 1):
+            if not self.crible.is_set(i - 1):
+                premiers.append(2 * i + 1)
+        return premiers
+
+    def est_premier(self, n):
+        if n == 2:
+            return True
+        elif n % 2 == 0 or n <= 1:
+            return False
+        else:
+            # n est impair et >= 3
+            assert n < self.n_max
+            return not self.crible.is_set((n - 3) // 2)

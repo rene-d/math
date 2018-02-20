@@ -1,29 +1,37 @@
 #! /usr/bin/env python3
 """
-Test la primalité d'un nombre
+Test de la primalité d'un nombre
+
+Détails de l'algorithme et de son implémentation en Python
 """
 
 
-# saisie du nombre
+# saisit le nombre à vérifier
 n = input('entrez le nombre à tester : ')
 
 # convertit la chaîne de caractères en entier
 n = int(n)
 
-# teste si le nombre est pair (% = reste de la division entière)
+# 0 et 1 ne sont pas des nombres premiers
 if n <= 1:
     print(n, "n'est pas premier")
+
+# 2 est le seul premier pair
 elif n == 2:
     print(n, "est premier !")
+
+# teste si le nombre est pair (% = reste de la division entière)
 elif n % 2 == 0:
     print(n, "est pair")
+
+# n ≥ 3 : on cherche s'il a un diviseur d impair, avec d² ≤ n
 else:
-    i = 3
+    d = 3
     est_premier = True
-    while i * i <= n:
-        if n % i == 0:
-            print(n, "est multiple de", i)
+    while d * d <= n:
+        if n % d == 0:
+            print(n, "est multiple de", d)
             est_premier = False
-        i = i + 2
+        d = d + 2
     if est_premier:
         print(n, "est premier !")

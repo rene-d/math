@@ -56,6 +56,13 @@ def test_cribles():
             assert v == reference[i]
 
 
+def test_classe():
+    reference = lit_reference()
+    c = eratosthene.Crible(1000)
+    for i in range(0, 1001):
+        assert c.est_premier(i) == (i in reference)
+
+
 def test_bitfield():
     N = 100
     b = eratosthene.bitfield(N)
