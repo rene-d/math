@@ -17,5 +17,8 @@ Quelques programmes tournant autour de la géométrie
 ## premiers
 Programmes autour des nombres premiers
 
+## projecteuler
+Mes solutions aux problèmes du [Project Euler](https://projecteuler.net/).
+
 ## divers
 Programmes d'initiation à Python

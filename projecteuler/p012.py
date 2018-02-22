@@ -6,8 +6,8 @@ https://projecteuler.net/problem=12
 
 
 def diviseurs(n):
-    div = []
-    i = 1
+    div = [1]
+    i = 2
     while i * i <= n:
         q, r = divmod(n, i)
         if r == 0:
@@ -15,6 +15,7 @@ def diviseurs(n):
             if i != q:
                 div.append(q)
         i += 1
+    div.append(n)
     return div
 
 
