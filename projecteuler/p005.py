@@ -1,4 +1,9 @@
-from premiers.decompose import decompose2
+"""
+
+https://projecteuler.net/problem=5
+"""
+
+from eulerlib import decompose2
 
 
 f = dict()

@@ -1,8 +1,16 @@
+"""
+XOR decryption
+
+https://projecteuler.net/problem=59
+"""
+
+
 def is_letter(c):
+    """ vérifie si c est une lettre majuscule ou minuscule """
     return (65 <= c <= 90) or (97 <= c <= 122)
 
 
-def decrypte(encoded, key):
+def decrypt(encoded, key):
     decoded = []
     len_key = len(key)
     len_enc = len(encoded)
@@ -49,4 +57,4 @@ with open("p059_cipher.txt") as f:
 for a in range(97, 123):
     for b in range(97, 123):
         for c in range(97, 123):
-            decrypte(cipher, [a, b, c])
+            decrypt(cipher, [a, b, c])

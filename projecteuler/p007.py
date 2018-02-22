@@ -7,7 +7,8 @@ What is the 10 001st prime number?
 
 https://projecteuler.net/problem=7
 """
-from premiers.liste_premiers import est_premier
+
+from eulerlib import est_premier
 
 
 compte = 0

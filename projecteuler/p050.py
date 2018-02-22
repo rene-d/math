@@ -14,8 +14,8 @@ Which prime, below one-million, can be written as the sum of the most consecutiv
 https://projecteuler.net/problem=50
 """
 
-from premiers.eratosthene import Crible
-from premiers.liste_premiers import est_premier
+from eulerlib import est_premier, Crible
+
 
 MAX = 1000000
 

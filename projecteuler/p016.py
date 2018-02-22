@@ -1,6 +1,7 @@
 """
 Power digit sum
 
+https://projecteuler.net/problem=16
 """
 
 # aucun intérêt puisque Python gère les entiers longs

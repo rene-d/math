@@ -13,7 +13,7 @@ What 12-digit number do you form by concatenating the three terms in this sequen
 https://projecteuler.net/problem=49
 """
 
-from premiers.eratosthene import Crible
+from eulerlib import Crible
 
 
 crible = Crible(10000)

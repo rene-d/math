@@ -8,11 +8,16 @@ Find the sum of all the primes below two million.
 https://projecteuler.net/problem=10
 """
 
-from premiers.liste_premiers import est_premier
-from premiers.eratosthene import Crible
+from eulerlib import est_premier, Crible
 
 
 MAX = 2000000
+
+# solution avec crible
+crible = Crible(MAX)
+print(sum(crible.liste()))
+
+exit()  # les solutions ci-après sont lentes mais donnent le même résultat
 
 # solution en testant tous les entiers impairs
 somme = 2
@@ -25,7 +30,3 @@ print(somme)
 
 # même solution, écriture plus concise
 print(2 + sum(i for i in range(3, MAX, 2) if est_premier(i)))
-
-# solution avec crible
-crible = Crible(MAX)
-print(sum(crible.liste()))
