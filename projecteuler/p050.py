@@ -42,4 +42,4 @@ for i in range(len(cumul)):
             longueur = j - i
             resultat = n
 
-print(resultat, longueur)
+print(resultat)

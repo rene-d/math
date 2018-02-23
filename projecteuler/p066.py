@@ -4,7 +4,7 @@ Diophantine equation
 https://projecteuler.net/problem=66
 """
 
-from eulerlib import Fraction
+from fractions import Fraction
 
 """
 https://fr.wikipedia.org/wiki/Fraction_continue_d%27un_irrationnel_quadratique
@@ -21,6 +21,6 @@ resultat = 0
 f = Fraction(1)
 for i in range(1000):
     f = fraction_continue(f)
-    if len(str(f.num)) > len(str(f.den)):
+    if len(str(f.numerator)) > len(str(f.denominator)):
         resultat += 1
 print(resultat)

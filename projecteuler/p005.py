@@ -3,12 +3,12 @@
 https://projecteuler.net/problem=5
 """
 
-from eulerlib import decompose2
+from eulerlib import decompose
 
 
 f = dict()
 for i in range(1, 21):
-    for k in decompose2(i):
+    for k in decompose(i):
         if f.get(k[0], 0) < k[1]:
             f[k[0]] = k[1]
 

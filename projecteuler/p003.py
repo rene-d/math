@@ -11,4 +11,4 @@ https://projecteuler.net/problem=3
 from eulerlib import decompose
 
 
-print(decompose(600851475143)[-1])
+print(decompose(600851475143)[-1][0])

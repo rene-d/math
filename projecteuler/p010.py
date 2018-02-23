@@ -17,7 +17,10 @@ MAX = 2000000
 crible = Crible(MAX)
 print(sum(crible.liste()))
 
-exit()  # les solutions ci-après sont lentes mais donnent le même résultat
+
+"""
+
+# les solutions ci-après sont lentes mais donnent le même résultat
 
 # solution en testant tous les entiers impairs
 somme = 2
@@ -30,3 +33,5 @@ print(somme)
 
 # même solution, écriture plus concise
 print(2 + sum(i for i in range(3, MAX, 2) if est_premier(i)))
+
+"""

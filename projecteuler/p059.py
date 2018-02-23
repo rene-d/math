@@ -45,6 +45,8 @@ def decrypt(encoded, key):
     if nb_chars < len_enc * 0.7 or nb_others > len_enc * 0.3:
         return None
 
+    print(sum(decoded))
+    print()
     print(''.join([chr(i) for i in decoded]))
     print('key:', [chr(i) for i in key])
     print('stats:', nb_chars, nb_others, nb_err, len_enc)
