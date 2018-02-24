@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <cstdint>
 #include <cmath>
+#include <cinttypes>
+#include <cstdlib>
 
 
 bool is_prime(uint32_t i)

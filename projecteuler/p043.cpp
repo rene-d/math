@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <cmath>
+#include <cinttypes>
 
 
 int d(const char *chiffres, int p)
