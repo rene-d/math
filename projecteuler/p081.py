@@ -18,10 +18,6 @@ def cherche(x, y):
     if y >= N or x >= N:
         return 0
 
-    #c = cache.get((x, y))
-    #if c is not None:
-    #    return c
-
     v = matrix[x][y]
     if x == N - 1:
         # on ne peut que descendre
@@ -32,8 +28,6 @@ def cherche(x, y):
     else:
         # il faut tester à droite ou en bas
         v += min(cherche(x + 1, y), cherche(x, y + 1))
-
-    #cache[(x, y)] = v
 
     return v
 

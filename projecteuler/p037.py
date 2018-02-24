@@ -32,12 +32,10 @@ for p in crible.liste():
     while gauche >= 10 and not ko:
 
         gauche, r = divmod(gauche, 10)
-        #print("x",gauche)
         if not crible.est_premier(gauche):
             ko = True
 
         droite = droite + r * 10 ** i
-        #print("y",droite)
         if not crible.est_premier(droite):
             ko = True
 

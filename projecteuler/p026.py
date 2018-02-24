@@ -7,7 +7,8 @@ https://projecteuler.net/problem=26
 from eulerlib import pgcd
 
 # https://fr.wikipedia.org/wiki/Développement_décimal_périodique#Longueur_de_la_période
-# Si n est premier avec 10, la longueur de la période est égale à l'ordre multiplicatif de 10 modulo n.
+# Si n est premier avec 10, la longueur de la période est égale à l'ordre multiplicatif de
+#  10 modulo n.
 
 # https://fr.wikipedia.org/wiki/Ordre_multiplicatif
 # l'ordre multiplicatif, modulo un entier naturel n, d'un entier relatif a premier à n,
