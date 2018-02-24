@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <cmath>
 #include <cinttypes>
-#include <cstdlib>
+#include <cstring>
 
 
 bool is_prime(uint32_t i)
