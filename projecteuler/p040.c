@@ -22,7 +22,7 @@ int main()
 
         n = len;
         k = i;
-        while (k > 0) { d[n--] = k % 10; k /= 10; }
+        while (k > 0) { d[n--] = (char)(k % 10); k /= 10; }
 
         ++i;
     }
