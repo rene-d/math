@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <inttypes.h>
 
 int main()
 {
@@ -16,7 +17,7 @@ int main()
     }
     m = m + 1;
 
-    printf("%llu\n", m);
+    printf("%" PRIu64 "\n", m);
 
     return 0;
 }
