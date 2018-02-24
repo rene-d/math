@@ -4,4 +4,14 @@
     // https://code.visualstudio.com/docs/python/linting
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
+    "files.associations": {
+        "__config": "cpp",
+        "__nullptr": "cpp",
+        "exception": "cpp",
+        "initializer_list": "cpp",
+        "new": "cpp",
+        "stdexcept": "cpp",
+        "typeinfo": "cpp",
+        "algorithm": "cpp"
+    },
 }

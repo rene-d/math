@@ -191,7 +191,7 @@ def exact_sqrt(x):
         a = (a << 1) + b
         N = (N << 2) + n
 
-    return (a, N - a * a)
+    return a, N - a * a
 
 
 def diviseurs(n):
@@ -206,21 +206,6 @@ def diviseurs(n):
         i += 1
     div.append(n)
     return div
-
-
-# Decorator. The underlying function must take only positional arguments, no keyword arguments.
-class memoize:
-    def __init__(self, func):
-        self.func = func
-        self.cache = {}
-
-    def __call__(self, *args):
-        if args in self.cache:
-            return self.cache[args]
-        else:
-            val = self.func(*args)
-            self.cache[args] = val
-            return val
 
 
 def EulerPhi(n):
