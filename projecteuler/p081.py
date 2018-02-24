@@ -4,19 +4,23 @@ Path sum: two ways
 https://projecteuler.net/problem=81
 """
 
-from eulerlib import memoize
-
+import functools
 
 matrix = []
 N = 0
+cache = {}
 
 
-@memoize
+@functools.lru_cache(maxsize=None)
 def cherche(x, y):
     global N, matrix, cache
 
     if y >= N or x >= N:
         return 0
+
+    #c = cache.get((x, y))
+    #if c is not None:
+    #    return c
 
     v = matrix[x][y]
     if x == N - 1:
@@ -29,6 +33,8 @@ def cherche(x, y):
         # il faut tester à droite ou en bas
         v += min(cherche(x + 1, y), cherche(x, y + 1))
 
+    #cache[(x, y)] = v
+
     return v
 
 
@@ -38,6 +44,7 @@ for i in open("p081_matrix.txt"):
         matrix.append(ligne)
 
 N = len(matrix)
+assert N == 80
 for row in matrix:
     assert len(row) == N
 

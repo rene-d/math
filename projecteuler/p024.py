@@ -1,3 +1,9 @@
+"""
+Lexicographic permutations
+
+https://projecteuler.net/problem=24
+"""
+
 import itertools
 
 for idx, perm in enumerate(itertools.permutations("0123456789")):
