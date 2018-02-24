@@ -20,5 +20,5 @@ for i in range(2, 1000000):
     liste_facteurs.append(facteurs)
 
     if len(liste_facteurs) >= consecutif:
-        print(i - len(liste_facteurs))
+        print(i - len(liste_facteurs) + 1)
         break
