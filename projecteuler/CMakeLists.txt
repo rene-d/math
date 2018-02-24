@@ -1,6 +1,6 @@
 #
 
-set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -Wconversion -Werror")
+set(CMAKE_CXX_FLAGS "-std=c++11 -O3 -Wall -Wextra -Wconversion -Werror")
 set(CMAKE_C_FLAGS "-std=c99 -O3 -Wall -Wextra -Wconversion -Werror")
 
 add_executable(p040 p040.c)
