@@ -154,6 +154,14 @@ def pgcd(a, b):
     return a
 
 
+def ppcm(nombres):
+    """ retourne le plus petit commun multipe d'une liste de nombre """
+    p = nombres[0]
+    for n in nombres[1:]:
+        p = p * n // pgcd(p, n)
+    return p
+
+
 # https://gist.github.com/tobin/11233492
 def exact_sqrt(x):
     """Calculate the square root of an arbitrarily large integer.
