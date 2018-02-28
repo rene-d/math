@@ -4,3 +4,5 @@ pytest-mock
 pytest-pythonpath
 coveralls
 flake8
+scipy
+numpy
