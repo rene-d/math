@@ -73,6 +73,7 @@ SOLUTIONS = {
     97: 'f0e2911e303617c9648692ee8056beeb045d89e469315716abed47cd94a3cd56',
     104: '87dfcf5471e77980d098ff445701dbada0f6f7bac2fa5e43fa7685ec435040e1',
     607: '2d9b6a1b4810a39471e5dae85eadf595fc108097eeda746c8925a7be057464de',
+    613: 'afe8c7002c5e15859be829b4b69f0da00c1298971d5afa469b050016fc021978',
     # solution_end
 }
 
@@ -89,7 +90,7 @@ def test_c(numero_c):
 
     if not pytest.native_tests_available:
         pytest.skip("native tests are unavailable")
-    if not numero_c in SOLUTIONS:
+    if numero_c not in SOLUTIONS:
         pytest.fail("solution {} is not known".format(numero_c))
     res = subprocess.run("build/p%03d" % numero_c, stdout=subprocess.PIPE)
     assert res.returncode == 0
@@ -101,7 +102,7 @@ def test_py(numero_py, capsys):
     lance un test Python et teste la sortie
     """
 
-    if not numero_py in SOLUTIONS:
+    if numero_py not in SOLUTIONS:
         pytest.fail("solution {} is not known".format(numero_py))
 
     spec = importlib.util.find_spec("p%03d" % (numero_py))
@@ -123,10 +124,13 @@ def numero_c(request):
 
 
 def pytest_generate_tests(metafunc):
+    """
+    génère les tests Python et C à partir de la présence des fichiers pNNN.py et pNNN.c[pp]
+    """
     if 'numero_py' in metafunc.fixturenames:
         list_py = [int(i[1:4]) for i in sorted(glob.iglob("p[0-9][0-9][0-9].py"))]
         metafunc.parametrize("numero_py", list_py, indirect=True)
 
     if 'numero_c' in metafunc.fixturenames:
-        list_c = [int(i[1:4]) for i in sorted(glob.iglob("p[0-9][0-9][0-9].c"))]
+        list_c = [int(i[1:4]) for i in sorted(glob.iglob("p[0-9][0-9][0-9].c*"))]
         metafunc.parametrize("numero_c", list_c, indirect=True)

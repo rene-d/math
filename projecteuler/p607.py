@@ -29,6 +29,7 @@ x3 = x2 + 10
 x4 = x3 + 10
 x5 = x4 + 10
 
+
 # fonction qui donne le temps de trajet en fonction des points (xi, yi) de passage
 # aux limites des régions
 def temps(v):
@@ -41,6 +42,7 @@ def temps(v):
     t += sqrt(10 * 10 + (y4 - y5) ** 2) / 5
     t += sqrt(d1 * d1 + (y5 - yb) ** 2) / 10    # temps de trajet entre le marais et B
     return t
+
 
 ligne_droite = [x0, x1, x2, x3, x4, x5]
 res = minimize(temps, ligne_droite, tol=1e-10)
