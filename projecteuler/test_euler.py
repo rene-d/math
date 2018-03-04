@@ -60,11 +60,18 @@ SOLUTIONS = {
     48: '743d17cbff06ab458b99ecbb32e1d6bb9a7ff2ac804118f7743177dd969cfc61',
     49: '47c6094ff1ff6e37788def89190c8256619ef1511681c503fea02c171569d16e',
     50: '6ee74ef623df9fb69facd30b91ed78fe70370462bb267097f0dfeef9d9b057bb',
+    51: 'd17cec28356b4f9a7f1ec0f20cca4c89e270aeb0e75d70d485b05bb1f28e9f6d',
     52: 'ebd72b510911af3e254a030cd891cb804e1902189eee7a0f6199472eb5e4dba2',
     53: '9705cc6128a60cc22581217b715750a6053b2ddda67cc3af7e14803b27cf0c1f',
+    55: '9f484139a27415ae2e8612bf6c65a8101a18eb5e9b7809e74ca63a45a65f17f4',
+    56: '3658d7fa3c43456f3c9c87db0490e872039516e6375336254560167cc3db2ea2',
     57: '620c9c332101a5bae955c66ae72268fbcd3972766179522c8deede6a249addb7',
     58: '196f327021627b6a48db9c6e0a3388d110909d4bb957eb3fbc90ff1ecbda42cb',
     59: '30f8673eb8490e9b2c07ee2f4de3fcad91b9fd8dd96511b60a9833d2fb884cd6',
+    60: 'ad7c26db722221bfb1bf7e3c36b501bedf8be857b1cfa8664fccb074b54354f9',
+    61: '94e4fb283c1abcccae4b8b28e39a294a323cdc9732c3d3ce1133c518d0a286f6',
+    62: 'd25a595036aa8722157aca38f90084acb369b00df1070f49e203d5a3b7a0736d',
+    63: '0e17daca5f3e175f448bacace3bc0da47d0655a74c8dd0dc497a3afbdad95f1f',
     65: '1c6c0bb2c7ecdc3be8e134f79b9de45155258c1f554ae7542dce48f5cc8d63f0',
     66: '316c0f93c7fe125865d85d6e7e7a31b79e9a46c414c45078b732080fa22ef2a3',
     67: '53f66b6783cb7552d83015df01b0d5229569fce1dd7d1856335c7244b9a3ded6',
@@ -72,8 +79,10 @@ SOLUTIONS = {
     92: '538cd20a275b610698691d714b2adf4e4c321915def05667f4d25d97413ec076',
     97: 'f0e2911e303617c9648692ee8056beeb045d89e469315716abed47cd94a3cd56',
     104: '87dfcf5471e77980d098ff445701dbada0f6f7bac2fa5e43fa7685ec435040e1',
+    601: '571c5ade4cd89b460b7d2568a44d1efb05e2927ec840d8ecf149dc9e0ff09734',
     607: '2d9b6a1b4810a39471e5dae85eadf595fc108097eeda746c8925a7be057464de',
     613: 'afe8c7002c5e15859be829b4b69f0da00c1298971d5afa469b050016fc021978',
+    621: '458ca388a6b74c57ae13d1233984d5b66abb1f18dbfa12aa14ba868a9b5a708d',
     # solution_end
 }
 
@@ -88,6 +97,7 @@ def test_c(numero_c):
     lance la résolution d'un problème compilé et teste la sortie
     """
 
+    numero_c = int(numero_c)
     if not pytest.native_tests_available:
         pytest.skip("native tests are unavailable")
     if numero_c not in SOLUTIONS:
@@ -102,6 +112,7 @@ def test_py(numero_py, capsys):
     lance un test Python et teste la sortie
     """
 
+    numero_py = int(numero_py)
     if numero_py not in SOLUTIONS:
         pytest.fail("solution {} is not known".format(numero_py))
 
@@ -128,9 +139,9 @@ def pytest_generate_tests(metafunc):
     génère les tests Python et C à partir de la présence des fichiers pNNN.py et pNNN.c[pp]
     """
     if 'numero_py' in metafunc.fixturenames:
-        list_py = [int(i[1:4]) for i in sorted(glob.iglob("p[0-9][0-9][0-9].py"))]
+        list_py = [i[1:4] for i in sorted(glob.iglob("p[0-9][0-9][0-9].py"))]
         metafunc.parametrize("numero_py", list_py, indirect=True)
 
     if 'numero_c' in metafunc.fixturenames:
-        list_c = [int(i[1:4]) for i in sorted(glob.iglob("p[0-9][0-9][0-9].c*"))]
+        list_c = [i[1:4] for i in sorted(glob.iglob("p[0-9][0-9][0-9].c*"))]
         metafunc.parametrize("numero_c", list_c, indirect=True)

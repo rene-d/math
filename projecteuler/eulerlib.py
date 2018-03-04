@@ -20,9 +20,9 @@ def est_premier(n):
         return True
 
 
-class bitfield:
+class bitset:
     """
-    Implémentation d'un bitfield à stockage optimisé
+    Implémentation d'un bitset à stockage optimisé
     """
 
     def __init__(self, taille):
@@ -56,7 +56,7 @@ class Crible:
         self.n_max = n_max
 
         self.maximum = n = (n_max - 3) // 2 + 1
-        self.crible = crible = bitfield(n)
+        self.crible = crible = bitset(n)
 
         i = 0
         while i < n:

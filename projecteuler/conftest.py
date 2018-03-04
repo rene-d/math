@@ -6,7 +6,8 @@ import os
 def pytest_sessionstart(session):
     pe_dir = os.path.dirname(__file__)
     os.chdir(pe_dir)
-    res = subprocess.run("mkdir -p build && cd build && cmake .. && make", shell=True)
+    os.makedirs("build", exist_ok=True)
+    res = subprocess.run("cd build && cmake .. && make", shell=True, stderr=None)
     if res.returncode != 0:
         # pytest.fail("C/C++ build failed")
         print("C/C++ build failed - will skip native tests")

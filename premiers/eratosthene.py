@@ -3,9 +3,9 @@ Crible d'Eratosthène
 """
 
 
-class bitfield:
+class bitset:
     """
-    Implémentation d'un bitfield
+    Implémentation d'un bitset
     """
 
     def __init__(self, taille):
@@ -38,8 +38,8 @@ def cribler(n_max):
     avec le crible d'Eratosthène
     """
 
-    # crée un bitfield pour stocker la primalité des entiers de 2 à n
-    crible = bitfield(n_max + 1)
+    # crée un bitset pour stocker la primalité des entiers de 2 à n
+    crible = bitset(n_max + 1)
     premiers = []
 
     i = 2
@@ -74,10 +74,10 @@ def cribler_opti(n_max):
     n = (n_max - 3) // 2 + 1
 
     # on va stocker uniquement les nombres impairs de 3 à n_max
-    crible = bitfield(n)
+    crible = bitset(n)
     premiers = [2]
 
-    # i: itérateur dans le bitfield de taille n
+    # i: itérateur dans le bitset de taille n
     # la formule qui donne l'impair en fonction de i est : impair ← 2*i+3
     i = 0   # vaut pour le premier impair à tester, 3
     while i < n:
@@ -123,7 +123,7 @@ class Crible:
 
         # même calcul que selon la version optimisée ci-dessus
         self.maximum = n = (n_max - 3) // 2 + 1
-        self.crible = crible = bitfield(n)
+        self.crible = crible = bitset(n)
 
         i = 0
         while i < n:

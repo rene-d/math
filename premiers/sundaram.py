@@ -4,7 +4,7 @@ Crible de Sundaram
 https://en.wikipedia.org/wiki/Sieve_of_Sundaram
 """
 
-from eratosthene import bitfield
+from eratosthene import bitset
 
 
 class Sundaram:
@@ -15,7 +15,7 @@ class Sundaram:
         self.n_max = n_max
 
         self.maximum = maximum = (n_max - 3) // 2 + 1
-        self.crible = crible = bitfield(maximum)
+        self.crible = crible = bitset(maximum)
 
         for i in range(1, maximum + 1):
             for j in range(1, i + 1):

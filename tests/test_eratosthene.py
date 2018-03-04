@@ -63,9 +63,9 @@ def test_classe():
         assert c.est_premier(i) == (i in reference)
 
 
-def test_bitfield():
+def test_bitset():
     N = 100
-    b = eratosthene.bitfield(N)
+    b = eratosthene.bitset(N)
 
     # par défaut, tous les bits sont à 0 (False)
     for i in range(0, N):

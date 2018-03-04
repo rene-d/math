@@ -1,7 +1,8 @@
 # Project Euler
 
-Solutions _personnelles_ à certains problèmes du
-[Project Euler](https://projecteuler.net/).
+Solutions _personnelles_ à certains problèmes du [Project Euler](https://projecteuler.net/).
+
+La plupart sont écrites en Python, d'autres en C/C++. [WolframAlpha](http://www.wolframalpha.com) et [Sympy Gamma](http://www.sympygamma.com) sont aussi utilisés lorsqu'il y a des calculs à faire.
 
 [![Progression](https://projecteuler.net/profile/rene-d.png)](https://projecteuler.net/)
 
