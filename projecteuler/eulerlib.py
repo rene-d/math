@@ -57,6 +57,8 @@ class Crible:
 
         self.maximum = n = (n_max - 3) // 2 + 1
         self.crible = crible = bitset(n)
+        self._premiers = None
+        self._phi = None
 
         i = 0
         while i < n:
@@ -76,11 +78,13 @@ class Crible:
             i += 1
 
     def liste(self):
-        premiers = [2]
-        for i in range(1, self.maximum + 1):
-            if not self.crible.is_set(i - 1):
-                premiers.append(2 * i + 1)
-        return premiers
+        if self._premiers is None:
+            premiers = [2]
+            for i in range(1, self.maximum + 1):
+                if not self.crible.is_set(i - 1):
+                    premiers.append(2 * i + 1)
+            self._premiers = premiers
+        return self._premiers
 
     def est_premier(self, n):
         if n == 2:
@@ -94,6 +98,18 @@ class Crible:
 
             assert n < self.n_max
             return not self.crible.is_set((n - 3) // 2)
+
+
+    def EulerPhi(self):
+        if self._phi is None:
+            n_max = self.n_max
+            phi = [i for i in range(n_max)]
+            for p in self.liste():
+                for i in range(p, n_max, p):
+                    phi[i] //= p
+                    phi[i] *= p - 1
+            self._phi = phi
+        return self._phi
 
 
 def decompose(n):

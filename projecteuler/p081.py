@@ -8,17 +8,18 @@ import functools
 
 matrix = []
 N = 0
-cache = {}
 
 
 @functools.lru_cache(maxsize=None)
 def cherche(x, y):
-    global N, matrix, cache
+    global N, matrix
 
     if y >= N or x >= N:
         return 0
 
-    v = matrix[x][y]
+    # la méthode lecture de la matrice inverse x et y
+    v = matrix[y][x]
+
     if x == N - 1:
         # on ne peut que descendre
         v += cherche(x, y + 1)

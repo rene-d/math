@@ -11,7 +11,7 @@ mp.mp.dps = 105
 r = 0
 for i in range(1, 101):
     # on ne compte pas les carrés
-    if int(i **0.5)**2 != i:
+    if int(i ** 0.5) ** 2 == i:
         continue
 
     j = 0

@@ -6,3 +6,4 @@ coveralls
 flake8
 scipy
 numpy
+mpmath

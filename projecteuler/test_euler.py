@@ -76,9 +76,11 @@ SOLUTIONS = {
     65: '1c6c0bb2c7ecdc3be8e134f79b9de45155258c1f554ae7542dce48f5cc8d63f0',
     66: '316c0f93c7fe125865d85d6e7e7a31b79e9a46c414c45078b732080fa22ef2a3',
     67: '53f66b6783cb7552d83015df01b0d5229569fce1dd7d1856335c7244b9a3ded6',
+    70: '08c6a7c8c06a01d2b17993ada398084b0707652bcfbd580f9173bcddf120ac2c',
     76: '81c54809c3bdfc23f844fde21ae645525817b6e1bee1525270f49282888a5546',
     80: '58bfe3a44f8ae452aaa6ef6267bafc3e841cfe7f9672bdfeb841d2e3a62c1587',
     81: '04bad90d08bdf11010267ec9d1c9bbb49a813194dace245868ea8140aec9a1f7',
+    82: '52c42c55daea3131d5357498b8a0ddcf99d1babd16f6ccaee67cb3d0a665b772',
     92: '538cd20a275b610698691d714b2adf4e4c321915def05667f4d25d97413ec076',
     97: 'f0e2911e303617c9648692ee8056beeb045d89e469315716abed47cd94a3cd56',
     104: '87dfcf5471e77980d098ff445701dbada0f6f7bac2fa5e43fa7685ec435040e1',
@@ -118,6 +120,9 @@ def test_py(numero_py, capsys):
     numero_py = int(numero_py)
     if numero_py not in SOLUTIONS:
         pytest.fail("solution {} is not known".format(numero_py))
+
+    if numero_py in [60]:
+        pytest.skip("test {} is known for being too long".format(numero_py))
 
     spec = importlib.util.find_spec("p%03d" % (numero_py))
     module = importlib.util.module_from_spec(spec)

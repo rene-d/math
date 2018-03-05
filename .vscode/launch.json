@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "PythonFractales",
+            "name": "Project Euler",
             "type": "python",
             "request": "launch",
             "stopOnEntry": true,
@@ -14,7 +14,7 @@
             "args": [
                 "-v"
             ],
-            "cwd": "${workspaceFolder}/fractales",
+            "cwd": "${workspaceFolder}/projecteuler",
             "env": {},
             "envFile": "${workspaceFolder}/.env",
             "debugOptions": [
