@@ -99,8 +99,8 @@ class Crible:
             assert n < self.n_max
             return not self.crible.is_set((n - 3) // 2)
 
-
     def EulerPhi(self):
+        """ calcul de la fonction φ(n) pour les entiers de plage """
         if self._phi is None:
             n_max = self.n_max
             phi = [i for i in range(n_max)]

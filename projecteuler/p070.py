@@ -4,11 +4,12 @@ Totient permutation
 https://projecteuler.net/problem=70
 """
 
-from eulerlib import EulerPhi, Crible
+from eulerlib import Crible
 
 
 crible = Crible(10000000)
 phi = crible.EulerPhi()
+
 
 def est_permutation(a, b):
     chiffres = [0] * 10
@@ -19,6 +20,7 @@ def est_permutation(a, b):
         b, r = divmod(b, 10)
         chiffres[r] -= 1
     return all(c == 0 for c in chiffres)
+
 
 rmin, nmin = 10, 0
 for n in range(2, 10000000):
