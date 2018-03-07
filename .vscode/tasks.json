@@ -6,7 +6,7 @@
         {
             "label": "Build Project Euler Debug",
             "type": "shell",
-            "command": "cd ${workspaceFolder}/projecteuler ; mkdir -p debug ; cd debug ; cmake -DCMAKE_BUILD_TYPE=Debug .. ; make",
+            "command": "cd '${workspaceFolder}/projecteuler' ; mkdir -p debug ; cd debug ; cmake -DCMAKE_BUILD_TYPE=Debug .. ; make",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -15,7 +15,7 @@
         {
             "label": "Build Project Euler Release",
             "type": "shell",
-            "command": "cd ${workspaceFolder}/projecteuler ; mkdir -p build ; cd build ; cmake -DCMAKE_BUILD_TYPE=Release .. ; make",
+            "command": "cd '${workspaceFolder}/projecteuler' ; mkdir -p build ; cd build ; cmake -DCMAKE_BUILD_TYPE=Release .. ; make",
             "group": "build"
         }
     ]

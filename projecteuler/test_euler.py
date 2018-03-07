@@ -10,6 +10,9 @@ import hashlib
 import solutions_euler            # noqa
 
 
+SLOW_TESTS = [12, 60, 70]
+
+
 def is_solution(output, numero):
     result = output.split('\n', 1)[0]
     return hashlib.sha256(result.encode()).hexdigest() == pytest.SOLUTIONS[numero]
@@ -18,7 +21,7 @@ def is_solution(output, numero):
 def check_test(numero):
     if numero not in pytest.SOLUTIONS:
         pytest.skip("solution {} is not known".format(numero_py))
-    if numero in [12, 60]:
+    if numero in SLOW_TESTS:
         pytest.skip("test {} is known for being too long".format(numero_py))
 
 
