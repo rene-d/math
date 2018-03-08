@@ -78,6 +78,6 @@ for a in anagram():
 
             # on a une solution, on garde que le max
             smax = max(square, square2, smax)
-            print(a[0], w, "->", square, square2, subst)
+            # print(a[0], w, "->", square, square2, subst)
 
 print(smax)

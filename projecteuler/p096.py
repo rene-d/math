@@ -28,9 +28,9 @@ def solve(grid):
 
             # code similaire à ci-dessus... en bien plus optimisé
             k = cx + cy * 9
-            found = set(grid[y * 9:y * 9 + 9]
-                      + grid[x::9]
-                      + grid[k:k + 3] + grid[k + 9:k + 12] + grid[k + 18:k + 21])
+            found = set(grid[y * 9:y * 9 + 9] +
+                        grid[x::9] +
+                        grid[k:k + 3] + grid[k + 9:k + 12] + grid[k + 18:k + 21])
 
             missing = set("123456789") - found
 
