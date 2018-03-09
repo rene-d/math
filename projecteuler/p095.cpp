@@ -49,7 +49,7 @@ int main()
             if (nmax < n) { nmax = n; xmin = N; }
             //printf("[%d] chaine %2d :", i, n);
             unsigned k = n;
-            while (--k>0)
+            while (--k > 0)
             {
                 if (nmax == n && xmin > a) xmin = a;
                 a = sum_of_div[a];

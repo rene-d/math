@@ -7,6 +7,7 @@
     "files.associations": {
         "type_traits": "cpp",
         "limits": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "algorithm": "c"
     },
 }

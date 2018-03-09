@@ -57,7 +57,9 @@ with open("p096_sudoku.txt") as f:
         if i.startswith("Grid "):
             grid = ''.join([next(f).strip() for _ in range(9)])
             assert len(grid) == 81
+            # for i in range(9): print(' '.join(grid.replace('0', '.')[i * 9:i * 9 + 9]))
+            # print()
             solution = solve(grid)
-            # print(solution)
+            # for i in range(9): print(' '.join(solution[i * 9:i * 9 + 9]))
             result += int(solution[0:3])
 print(result)
