@@ -1,5 +1,6 @@
 .vscode/.ropeproject/
-/dump/
+projecteuler/debug/
+projecteuler/build/
 
 fractales/*.ps
 .pytest_cache/

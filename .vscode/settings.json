@@ -8,6 +8,18 @@
         "type_traits": "cpp",
         "limits": "cpp",
         "iosfwd": "cpp",
-        "algorithm": "c"
+        "algorithm": "c",
+        "cassert": "cpp",
+        "random": "cpp",
+        "__locale": "cpp"
     },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/.pytest_cache": true,
+        "**/.ropeproject": true
+    }
 }

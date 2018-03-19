@@ -10,13 +10,19 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
         },
         {
             "label": "Build Project Euler Release",
             "type": "shell",
             "command": "cd '${workspaceFolder}/projecteuler' ; mkdir -p build ; cd build ; cmake -DCMAKE_BUILD_TYPE=Release .. ; make",
-            "group": "build"
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
         }
     ]
 }

@@ -27,7 +27,7 @@ void bruteforce1()
         //  1_2_3_4_5_6_7_8_9_0
         n = 1020304050607080900 + a + b + c + d + e + f + g + h + i;
 
-        r = sqrt(n);
+        r = (uint64_t) sqrt(n);
         if (r * r == n)
         {
             printf("%" PRIu64 "\n", r);
@@ -40,8 +40,8 @@ void bruteforce1()
 void bruteforce2()
 {
     uint64_t    n, r;
-    uint64_t    a = sqrt(1020304050607080900);
-    uint64_t    b = sqrt(1929394959697989990);
+    uint64_t    a = (uint64_t) sqrt(1020304050607080900);
+    uint64_t    b = (uint64_t) sqrt(1929394959697989990);
     int         i;
 
     for (r = b; r >= a; r--)

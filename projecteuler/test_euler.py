@@ -49,9 +49,20 @@ def test_py(numero_py, capsys):
 
     spec = importlib.util.find_spec("p%03d" % (numero_py))
     module = importlib.util.module_from_spec(spec)
-
     spec.loader.exec_module(module)
     out = capsys.readouterr().out
+
+    # certains programmes sont écrits avec main() ou pNNN()
+    if out == "":
+        main = getattr(module, "main")
+        if main is not None:
+            main()
+        else:
+            f = getattr(module, "p%03d" % (numero_py))
+            if f is not None:
+                f()
+        out = capsys.readouterr().out
+
     assert is_solution(out, numero_py)
 
 
