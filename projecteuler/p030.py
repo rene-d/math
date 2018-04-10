@@ -1,4 +1,5 @@
 """
+Digit fifth powers
 
 https://projecteuler.net/problem=30
 """

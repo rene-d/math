@@ -1,4 +1,5 @@
 """
+Names scores
 
 https://projecteuler.net/problem=22
 """

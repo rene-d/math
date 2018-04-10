@@ -126,7 +126,7 @@ def decompose(n):
             i += 2
         else:
             i += 1
-    if n != 1:
+    if n > 1:
         facteurs.append(n)
 
     # étape 2: groupe les facteurs identiques
