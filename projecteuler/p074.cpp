@@ -3,7 +3,9 @@
 // https://projecteuler.net/problem=74
 // https://www.hackerrank.com/contests/projecteuler/challenges/euler074
 
-#include <bits/stdc++.h>
+#include <vector>
+#include <set>
+#include <iostream>
 
 
 const unsigned fact10[] = { 1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880 };
