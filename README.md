@@ -5,20 +5,29 @@
 
 Divers petits programmes mathématiques
 
-## olympiades
+##
+
+### olympiades
 Solutions informatiques à des exercices d'[Olympiades](https://euler.ac-versailles.fr/webMathematica/clubs_compet/olympiades.htm) collège
 
-## fractales
+### fractales
 Courbes fractales (flocon de von Koch et autres)
 
-## géométrie
+### géométrie
 Quelques programmes tournant autour de la géométrie
 
-## premiers
+### premiers
 Programmes autour des nombres premiers
 
-## projecteuler
+### projecteuler
 Mes solutions aux problèmes du [Project Euler](https://projecteuler.net/).
 
-## divers
+### divers
 Programmes d'initiation à Python
+
+
+## Outils et liens
+
+[Visual Studio Code](https://code.visualstudio.com)
+[KaTeX](https://github.com/Khan/KaTeX)
+[codecogs](https://www.codecogs.com/latex/eqneditor.php)
