@@ -7,7 +7,7 @@ def pytest_sessionstart(session):
     pe_dir = os.path.dirname(__file__)
     os.chdir(pe_dir)
     os.makedirs("build", exist_ok=True)
-    res = subprocess.run("cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make VERBOSE=1",
+    res = subprocess.run("cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make -j2",
                          shell=True, stderr=None)
     if res.returncode != 0:
         # pytest.fail("C/C++ build failed")
