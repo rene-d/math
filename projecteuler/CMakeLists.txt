@@ -1,7 +1,7 @@
 #
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -Wconversion -Wsign-conversion -Werror")
-set(CMAKE_C_FLAGS "-std=c99 -Wall -Wextra -Wconversion -Wsign-conversion -Werror")
+set(CMAKE_C_FLAGS "-std=c99 -Wall -Wextra -Wconversion -Wsign-conversion")
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
