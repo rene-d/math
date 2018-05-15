@@ -60,11 +60,15 @@ int main(int argc, char *argv[])
     {
         // HackerRank
         int T, n;
-        scanf("%d", &T);
+        
+        if (scanf("%d", &T) != 1)
+            T = 0;
+        
         while (T--)
         {
-            scanf("%d", &n);
-            solve(n);
+            if (scanf("%d", &n) != 1)
+                break;
+            solve(n);   
         }
     }
     else
