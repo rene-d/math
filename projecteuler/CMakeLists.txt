@@ -28,3 +28,4 @@ add_executable(p206 p206.c)
 add_executable(p345 p345.cpp)
 
 set_source_files_properties(p085.c PROPERTIES LANGUAGE CXX)
+set_source_files_properties(p206.c PROPERTIES LANGUAGE CXX)
