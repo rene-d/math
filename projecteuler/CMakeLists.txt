@@ -5,7 +5,7 @@ set(CMAKE_C_FLAGS "-std=c99 -Wall -Wextra -Wconversion -Wsign-conversion -Werror
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
-set(CMAKE_EXE_LINKER_FLAGS "-lm")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
 
 add_executable(p040 p040.c)
 add_executable(p041 p041.cpp)
