@@ -1,11 +1,16 @@
 #
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -Wconversion -Wsign-conversion")
-set(CMAKE_C_FLAGS "-std=c99 -Wall -Wextra -Wconversion -Wsign-conversion")
+cmake_minimum_required(VERSION 3.5)
+
+project(projecteuler)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_C_STANDARD 11)
+
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wconversion -Wsign-conversion")
+set(CMAKE_C_FLAGS "-Wall -Wextra -Wconversion -Wsign-conversion")
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-
-#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
 
 add_executable(p040 p040.c)
 add_executable(p041 p041.cpp)
@@ -27,5 +32,7 @@ add_executable(p097 p097.c)
 add_executable(p206 p206.c)
 add_executable(p345 p345.cpp)
 
-set_source_files_properties(p085.c PROPERTIES LANGUAGE CXX)
-set_source_files_properties(p206.c PROPERTIES LANGUAGE CXX)
+#set_source_files_properties(p085.c PROPERTIES LANGUAGE CXX)
+
+target_link_libraries(p085 m)
+target_link_libraries(p206 m)
