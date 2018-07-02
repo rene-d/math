@@ -4,13 +4,15 @@ cmake_minimum_required(VERSION 3.5)
 
 project(projecteuler)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS on)
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_C_STANDARD 11)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wconversion -Wsign-conversion")
 set(CMAKE_C_FLAGS "-Wall -Wextra -Wconversion -Wsign-conversion")
 
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 add_executable(p040 p040.c)
 add_executable(p041 p041.cpp)
