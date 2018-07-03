@@ -55,9 +55,14 @@ def hackerrank():
         solve(n)
 
 
-if __name__ == '__main__':
+def main():
     import os
     if os.getenv('OUTPUT_PATH', '').startswith("/run-"):
         hackerrank()
     else:
         p085()
+
+
+if __name__ == '__main__':
+    main()
+
