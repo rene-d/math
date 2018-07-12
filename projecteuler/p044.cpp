@@ -36,7 +36,7 @@ int main()
 
             if (is_pentagonal[diff] && is_pentagonal[sum])
             {
-                printf("%zd\n", diff);
+                printf("%zu\n", diff);
                 //printf("%zd %zd D=%zd\n", j, k, d);
             }
         }
