@@ -5,7 +5,6 @@ https://projecteuler.net/problem=12
 """
 
 
-
 def nb_diviseurs(n):
     div = 1
     i = 2
