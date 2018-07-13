@@ -31,3 +31,7 @@ Programmes d'initiation à Python
 [Visual Studio Code](https://code.visualstudio.com)
 [KaTeX](https://github.com/Khan/KaTeX)
 [codecogs](https://www.codecogs.com/latex/eqneditor.php)
+
+## Licence
+
+[MIT](https://fr.wikipedia.org/wiki/Licence_MIT)
