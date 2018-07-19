@@ -5,6 +5,8 @@ projecteuler/build/
 fractales/*.ps
 .pytest_cache/
 
+work/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
