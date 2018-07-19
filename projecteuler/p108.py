@@ -36,6 +36,6 @@ while True:
     p = 1
     for _, e in decompose(n).items():
         p *= 2 * e + 1                  # nombre de diviseurs de n²
-    if (p + 1) // 2 >= 1000:            # compte-tenu du calcul de la ligne précédente, p est toujours impair!
-        print(n)
+    if (p + 1) // 2 >= 1000:            # compte-tenu du calcul de la ligne précédente,
+        print(n)                        # p est toujours impair!
         break
