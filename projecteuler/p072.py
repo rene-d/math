@@ -6,7 +6,7 @@ https://projecteuler.net/problem=72
 
 
 def totients(n):
-    """ retourne la liste des indicatrices d'Euler (ou totient) pour i ≤ n """
+    """ retourne la liste des indicatrices d'Euler (ou totient) pour 2 ≤ i ≤ n """
     phi = list(range(n + 1))
     for i in range(2, n + 1):
         if phi[i] == i:     # i est premier
