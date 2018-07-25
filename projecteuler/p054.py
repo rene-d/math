@@ -55,18 +55,20 @@ def hand_value(hand):
     # three of a kind
     if counts[0][0] == 3:
         a, b = counts[1][1], counts[2][1]
-        if a < b: a, b = b, a
+        if a < b:
+            a, b = b, a
         return 4, counts[0][1], a, b
 
     # two pairs
     if counts[0][0] == 2 and counts[1][0] == 2:
         a, b = counts[0][1], counts[1][1]
-        if a < b: a, b = b, a
+        if a < b:
+            a, b = b, a
         return 3, a, b, counts[2][1]
 
     # one pair
     if counts[0][0] == 2:
-        a, b, c = sorted([counts[1][1], counts[2][1], counts[3][1] ], reverse=True)
+        a, b, c = sorted([counts[1][1], counts[2][1], counts[3][1]], reverse=True)
         return 2, counts[0][1], a, b, c
 
     return 1, cards[4], cards[3], cards[2], cards[1], cards[0]
