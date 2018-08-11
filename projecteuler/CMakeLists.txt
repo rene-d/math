@@ -12,7 +12,6 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wconversion -Wsign-conversion")
 set(CMAKE_C_FLAGS "-Wall -Wextra -Wconversion -Wsign-conversion")
 
-#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 add_executable(p040 p040.c)
 add_executable(p041 p041.cpp)
@@ -38,3 +37,5 @@ add_executable(p345 p345.cpp)
 
 target_link_libraries(p085 m)
 target_link_libraries(p206 m)
+
+add_executable(p215 p215.cpp)
