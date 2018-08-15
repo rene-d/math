@@ -1,7 +1,9 @@
 #! /usr/bin/env python3
 
 """
-solutions obfusquées
+solutions obfusquées pour vérification des problèmes
+
+elles sont à présent récupérées depuis https://github.com/luckytoilet/projecteuler-solutions
 """
 
 import pytest
@@ -636,6 +638,12 @@ pytest.SOLUTIONS = {
     626: '7c42e09e504cb269512dae989ee7fffe1f3bfea499c990e8edea796761331ccb',
     627: '5062b75aa39c974a579b0a3360c4da32e481d2242de72106f651c7d7de631cf1',
     628: 'dc656eef13928f18d14a9265be6a923bc7d76048b861cdf1523e397801a8ef52',
+    629: '9eefedc5b5995658be337f48146e37020db4ed3bb61e2af1fc57f698bd398b0d',
+    630: '6e17ecc4a4d07ffbd67c49a59d31b7efeabd3bfead49fdf1ec005836e6030ebf',
+    631: '781372694518c122f62566aec8867772e492fefef32c00e24b5604297dc1d44c',
+    632: 'c978055ae1d71dfdfd8bb4e845bb82fc4211b14560bf6001edefa4367e1d4403',
+    633: 'af4ff4b546369974642b3f68d4d3e90f0a0496b3b5d1572b638378fb49c7b4fa',
+    634: 'f6af89331ee087a2fc03e0bddd738e2716b49ed616ceb3b47743cf3806c6d8c2',
     # solution_end
 }
 
