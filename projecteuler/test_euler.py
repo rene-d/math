@@ -10,7 +10,7 @@ import hashlib
 import solutions_euler            # noqa
 
 
-SLOW_TESTS = [60, 70, 357]
+SLOW_TESTS = [60, 70, 84, 357]
 
 
 def is_solution(output, numero):
