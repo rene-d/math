@@ -15,6 +15,7 @@ from typing import NamedTuple
 import argparse
 import xml.etree.ElementTree as ET
 from raise_app import raise_app
+import canvasvg
 
 
 if sys.version_info < (3, 6):
@@ -420,6 +421,9 @@ p \t: sauver le dessin en PostScript
         elif event.char == 'P':
             self.auto_sauve = not self.auto_sauve
             self.sauve()
+        elif event.char == 'w':
+            print("export en .svg")
+            canvasvg.saveall("canvas.svg", self.crt.canvas)
 
         if self.generation != old_generation:
             self.dessine()
