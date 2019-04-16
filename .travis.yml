@@ -16,7 +16,7 @@ env:
 language: python
 
 python:
-  - 3.7
+  - 3.6
 
 before_install:
   - eval "${MATRIX_EVAL}"
@@ -37,4 +37,3 @@ after_success:
 cache:
     directories:
         - $HOME/.cache/pip
-        - $HOME/.cache/pre-commit
