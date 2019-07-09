@@ -54,6 +54,7 @@
             <variable nom="alpha" valeur="radians(85)" description="angle de la pointe, 60° pour von Koch"/>
             <variable nom="a" valeur="1/(1+cos(alpha))" description="longueur de chaque segment _/\_"/>
         </variables>
+        <generation max="5"/>
         <generateur>
             <point x="-1" y="0"/>
             <point x="-1+a" y="0"/>
@@ -82,7 +83,7 @@
             <point x="1" y="0" />
             <point x="3" y="0" />
         </generateur>
-        <generation max="5"/>
+        <generation max="4"/>
         <trace>
             <point1 x="-1" y="0" />
             <point2 x="1" y="0" />
