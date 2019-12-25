@@ -28,7 +28,7 @@ install:
 
 script:
   - pytest --cov=. --cov-branch
-  - pytest -v --duration=0  --cov=. --cov-branch --cov-append projecteuler
+  - pytest -v --cov=. --cov-branch --cov-append projecteuler
   - echo flake8
 
 after_success:
