@@ -28,6 +28,8 @@ install:
 
 script:
   - ls -la /
+  - ps axuf
+  - cat /etc/os-release || true
   - pytest --cov=. --cov-branch
   - pytest -v --cov=. --cov-branch --cov-append projecteuler
   - echo flake8
