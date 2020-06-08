@@ -1,5 +1,3 @@
-
-
 class Fraction:
     """
     calculs sur ℚ (ensemble des entiers rationnels)

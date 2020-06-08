@@ -25,6 +25,8 @@ while True:
         b = b.replace("−", "-")
         b = b.replace("×", "*")
         b = b.replace("^", "**")
+        b = b.replace("÷", "/")
+        b = b.replace(":", "/")
 
         v = re.sub(r"(\d+\.?\d*)", r'D("\1")', b)
         w = eval(v, {"D": decimal.Decimal, "sqrt": math.sqrt, "pi": decimal.Decimal(math.pi), "sin": math.sin, "cos": math.cos, "tan": math.tan,},)
