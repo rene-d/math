@@ -3,6 +3,9 @@
 # The Mice problem
 # https://en.wikipedia.org/wiki/Mice_problem
 
+# Nota: for animation purpose, the mice do not move at regular speed
+# but reduce the distance with the same ratio at each iteration.
+
 import subprocess
 from tkinter import Tk, Canvas, Frame, BOTH
 import numpy as np
@@ -12,7 +15,7 @@ import random
 import argparse
 
 
-for p in Path(".").glob("frame*.png"):
+for p in Path(".").glob("frame*.gif"):
     p.unlink()
 
 root = Tk()
@@ -38,7 +41,7 @@ def contour(mice):
     canvas.create_line(field)
 
 
-def save_as_png(canvas):
+def save_as_gif(canvas):
     if hasattr(canvas, "frame_number"):
         frame_number = canvas.frame_number
 
@@ -48,7 +51,7 @@ def save_as_png(canvas):
         img = Image.open("frame.eps")
         # img = img.rotate(15 * frame_number)
         filename = Path(f"frame{frame_number}")
-        img.save(filename.with_suffix(".png"), "png")
+        img.save(filename.with_suffix(".gif"), "gif")
 
         Path("frame.eps").unlink()
         canvas.frame_number += 1
@@ -81,7 +84,7 @@ def pursuit(mice, speed, path=True, field=True, animation=False, colors=False):
             return
         mice = mice2
 
-        save_as_png(canvas)
+        save_as_gif(canvas)
 
         if animation:
             delay = min(500, int(animation * delta))
@@ -96,14 +99,14 @@ def callback(event):
         if hasattr(canvas, "frame_number"):
             cmd = ["convert", "-delay", "10", "-loop", "0"]
             frames = []
-            frames.extend(f"frame{i}.png" for i in range(canvas.frame_number))
+            frames.extend(f"frame{i}.gif" for i in range(canvas.frame_number))
             cmd.extend(frames)
             cmd.extend(list(reversed(frames)))
             cmd.append("mice.gif")
             print(f"making animation with {canvas.frame_number} frames")
             subprocess.run(cmd)
             for i in range(canvas.frame_number):
-                Path(f"frame{i}.png").unlink()
+                Path(f"frame{i}.gif").unlink()
             print("done")
             delattr(canvas, "frame_number")
     elif event.keysym == "o":
@@ -150,7 +153,7 @@ contour(mice)
 canvas.pack(fill=BOTH, expand=1)
 
 canvas.frame_number = 0
-save_as_png(canvas)
+save_as_gif(canvas)
 
 pursuit(mice, args.speed, True, True, animation=0.1, colors=True)
 
@@ -159,5 +162,5 @@ root.bind("<Key>", callback)
 root.mainloop()
 
 
-for p in Path(".").glob("frame*.png"):
+for p in Path(".").glob("frame*.gif"):
     p.unlink()

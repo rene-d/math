@@ -10,10 +10,9 @@ from PIL import Image
 from pathlib import Path
 import argparse
 from typing import List
-import random
 
 
-for p in Path(".").glob("frame*.png"):
+for p in Path(".").glob("frame*.gif"):
     p.unlink()
 
 root = Tk()
@@ -23,7 +22,7 @@ f.pack(fill=BOTH, expand=1)
 canvas = Canvas(f, background="black")
 
 
-def save_as_png(canvas):
+def save_as_gif(canvas):
     if hasattr(canvas, "frame_number"):
         frame_number = canvas.frame_number
 
@@ -33,7 +32,7 @@ def save_as_png(canvas):
         img = Image.open("frame.eps")
         # img = img.rotate(15 * frame_number)
         filename = Path(f"frame{frame_number}")
-        img.save(filename.with_suffix(".png"), "png")
+        img.save(filename.with_suffix(".gif"), "gif")
 
         Path("frame.eps").unlink()
         canvas.frame_number += 1
@@ -41,7 +40,7 @@ def save_as_png(canvas):
 
 def pursuit(A: complex, P: List[complex], oA=None, oP=None, animation=True):
 
-    vA = 2 + 10j  # + random.randint(-4, 10) + random.randint(-10, 10) * 1j
+    vA = 2 + 10j
     vP = 15
 
     while True:
@@ -64,7 +63,7 @@ def pursuit(A: complex, P: List[complex], oA=None, oP=None, animation=True):
             o = canvas.create_oval(p2.real - 4, p2.imag - 4, p2.real + 4, p2.imag + 4)
             oP.append(o)
 
-        save_as_png(canvas)
+        save_as_gif(canvas)
 
         A, P = A2, P2
         delta = min(abs(A2 - p2) for p2 in P2)
@@ -109,7 +108,7 @@ def pursuit_circle(C: complex, A: complex, angle: float, P: List[complex], speed
             o = canvas.create_oval(p2.real - 4, p2.imag - 4, p2.real + 4, p2.imag + 4)
             oP.append(o)
 
-        save_as_png(canvas)
+        save_as_gif(canvas)
 
         A, P = A2, P2
         angle += vA_angular
@@ -132,13 +131,13 @@ def callback(event):
         if hasattr(canvas, "frame_number"):
             cmd = ["convert", "-delay", "20", "-loop", "0"]
             frames = []
-            frames.extend(f"frame{i}.png" for i in range(canvas.frame_number))
+            frames.extend(f"frame{i}.gif" for i in range(canvas.frame_number))
             cmd.extend(frames)
             cmd.append("dog.gif")
             print(f"making animation with {canvas.frame_number} frames")
             subprocess.run(cmd)
             for i in range(canvas.frame_number):
-                Path(f"frame{i}.png").unlink()
+                Path(f"frame{i}.gif").unlink()
             print("done")
             delattr(canvas, "frame_number")
     elif event.keysym == "o":
@@ -180,7 +179,7 @@ canvas.pack(fill=BOTH, expand=1)
 root.bind("<Key>", callback)
 
 canvas.frame_number = 0
-save_as_png(canvas)
+save_as_gif(canvas)
 
 if args.circle:
     A = 170 + SY * 0.5
@@ -206,5 +205,5 @@ else:
 root.mainloop()
 
 
-for p in Path(".").glob("frame*.png"):
+for p in Path(".").glob("frame*.gif"):
     p.unlink()
