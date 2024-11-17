@@ -60,7 +60,7 @@ def save_as_png(canvas: Canvas):
 
 def make_animation(canvas: Canvas):
     if hasattr(canvas, "frame_number"):
-        cmd = ["magick", "-delay", "20", "-loop", "0"]
+        cmd = ["magick", "-delay", "10", "-loop", "0"]
         frames = []
         frames.extend(f"frame{i}.png" for i in range(canvas.frame_number))
         cmd.extend(frames)
@@ -77,6 +77,7 @@ def key_callback(root: Tk, canvas: Canvas, event: Event):
         root.quit()
     elif event.keysym == "s":
         make_animation(canvas)
+        root.quit()
     else:
         print(f"évenement inconnu: {event}")
 
@@ -244,43 +245,47 @@ line(rotation(droite(-20, -b / a)), rotation(droite(20, -b / a)), dash=".", fill
 
 
 cA, cB = None, None
+dot_radius = 0.1 if args.save else 0.03
 
 
-def intersect(r, d):
+def intersect(r, d, min_r):
     global cA, cB
 
     P, Q = circle_intersect(A, r, B, r + d)
     if not P:
         return
 
-    if cA:
-        canvas.delete(cA)
-    if cB:
-        canvas.delete(cB)
+    if d > 0:
+        if cA:
+            canvas.delete(cA)
+        if cB:
+            canvas.delete(cB)
 
-    cA = circle(A, r, outline="red")
-    cB = circle(B, r + d, outline="red")
+        cA = circle(A, r, outline="red")
+        cB = circle(B, r + d, outline="red")
 
-    circle(P, 0.05, fill="white")
-    circle(Q, 0.05, fill="white")
+    circle(P, dot_radius, fill="white")
+    circle(Q, dot_radius, fill="white")
 
     save_as_png(canvas)
 
-    if r > 0:
-        # rend l'animation plus fluide
-        if r > 2:
-            e = 0.2
-        elif r > 0.75:
-            e = 0.05
-        else:
-            e = 0.01
+    # rend l'animation plus fluide
+    if r - min_r > 2:
+        e = 0.2
+    elif r - min_r > 1:
+        e = 0.1
+    elif r - min_r > 0.1:
+        e = 0.05
+    else:
+        e = 0.01
+    r -= e
 
-        # e = 0.01 * r
-        root.after(2, lambda: intersect(r - e, d))
+    if r > 0:
+        root.after(20, lambda: intersect(r, d, min_r))
 
 
 root.title("Construction par ensemble de points d'une hyperbole")
-intersect(12, d)
-# intersect(12, -d)
+intersect(12, d, c - a)
+intersect(12 + d, -d, c + a)
 
 root.mainloop()
