@@ -49,7 +49,6 @@ def save_as_gif(canvas):
         canvas.postscript(file="frame.eps", colormode="color")
 
         img = Image.open("frame.eps")
-        # img = img.rotate(15 * frame_number)
         filename = Path(f"frame{frame_number}")
         img.save(filename.with_suffix(".gif"), "gif")
 
