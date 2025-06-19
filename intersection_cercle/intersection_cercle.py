@@ -281,7 +281,7 @@ def intersect(r, d, min_r):
     r -= e
 
     if r > 0:
-        root.after(20, lambda: intersect(r, d, min_r))
+        root.after(250, lambda: intersect(r, d, min_r))
 
 
 root.title("Construction par ensemble de points d'une hyperbole")
